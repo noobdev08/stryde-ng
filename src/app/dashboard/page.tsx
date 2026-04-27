@@ -8,73 +8,71 @@ export default async function DashboardPage() {
 
   if (!user) redirect('/login')
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/paths`, {
-    cache: 'no-store'
-  })
-  const { data: paths } = await res.json()
-
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-6">
+    <div className="min-h-screen bg-[#0b1120] text-white px-6 py-10">
+
       <div className="max-w-4xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
+        {/* HEADER CARD */}
+        <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 flex items-center justify-between mb-8">
+
           <div>
-            <h1 className="text-2xl font-bold text-white">
-              Hey, {user.user_metadata?.name || 'Developer'} 👋
+            <h1 className="text-xl font-semibold">
+              Hey, {user.user_metadata?.name || "Developer"} 👋
             </h1>
-            <p className="text-slate-400 text-sm mt-1">Pick a path. Start executing.</p>
+            <p className="text-gray-400 text-sm mt-1">
+              Keep building. Small wins daily.
+            </p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-center">
-            <p className="text-2xl font-bold text-orange-400">🔥 0</p>
-            <p className="text-xs text-slate-500">day streak</p>
+
+          <div className="text-right">
+            <p className="text-2xl font-bold text-blue-500">0</p>
+            <p className="text-xs text-gray-500">day streak</p>
           </div>
+
         </div>
 
-        {/* Paths */}
-        <h2 className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-4">
-          Learning Paths
+        {/* MAIN CARDS */}
+        <h2 className="text-gray-400 text-xs uppercase tracking-widest mb-4">
+          Quick Actions
         </h2>
-        <div className="grid gap-4">
-          {paths?.map((path: any) => (
-            path.isLocked ? (
-              <div
-                key={path.id}
-                className="block p-6 rounded-2xl border bg-slate-900 border-slate-800 opacity-60 cursor-not-allowed"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold text-lg">{path.name}</h3>
-                      <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
-                        🔒 Locked
-                      </span>
-                    </div>
-                    <p className="text-slate-500 text-sm">{path.description}</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={path.id}
-                href={`/paths/${path.id}`}
-                className="block p-6 rounded-2xl border bg-slate-900 border-slate-700 hover:border-blue-500 cursor-pointer transition"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold text-lg">{path.name}</h3>
-                    </div>
-                    <p className="text-slate-500 text-sm">{path.description}</p>
-                  </div>
-                  <span className="text-blue-400 text-xl">→</span>
-                </div>
-              </Link>
-            )
-          ))}
+
+        <div className="grid md:grid-cols-2 gap-4">
+
+          <Link
+            href="/paths"
+            className="bg-[#0f172a] border border-gray-800 hover:border-blue-500 transition rounded-2xl p-6"
+          >
+            <h3 className="font-semibold text-lg mb-1">Learning Paths</h3>
+            <p className="text-gray-500 text-sm">
+              Continue your structured roadmap
+            </p>
+          </Link>
+
+          <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 opacity-70">
+            <h3 className="font-semibold text-lg mb-1">Projects</h3>
+            <p className="text-gray-500 text-sm">
+              Coming soon — build real-world apps
+            </p>
+          </div>
+
+          <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 opacity-70">
+            <h3 className="font-semibold text-lg mb-1">Progress</h3>
+            <p className="text-gray-500 text-sm">
+              Track your learning growth
+            </p>
+          </div>
+
+          <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-6 opacity-70">
+            <h3 className="font-semibold text-lg mb-1">Settings</h3>
+            <p className="text-gray-500 text-sm">
+              Manage your account
+            </p>
+          </div>
+
         </div>
 
       </div>
-    </main>
+    </div>
   )
 }

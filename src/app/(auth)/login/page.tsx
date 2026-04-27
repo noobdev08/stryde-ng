@@ -24,7 +24,7 @@ export default function LoginPage() {
           
           <div className="w-full max-w-md bg-[#020617] border border-gray-800 rounded-xl p-6 shadow-lg">
             
-            <h2 className="text-xl font-semibold text-white mb-6">
+            <h2 className="text-xl font-semibold text-white mb-6 ">
               Log in to your account
             </h2>
 
