@@ -50,35 +50,6 @@ export default function SettingsPage() {
               </div>
               <h2 className="text-lg font-bold text-white">{section.title}</h2>
             </div>
-
-            <div className="grid grid-cols-1 gap-6">
-              {section.fields.map((field, fIdx) => (
-                <div key={fIdx} className="flex flex-col gap-2">
-                  <label className="text-xs font-black uppercase tracking-widest text-slate-500">
-                    {field.label}
-                  </label>
-                  
-                  {field.type === "toggle" ? (
-                    <div className="flex items-center justify-between p-4 bg-slate-900/50 border border-slate-800 rounded-2xl">
-                      <span className="text-sm text-slate-300">Enable {field.label}</span>
-                      <div className="w-12 h-6 bg-blue-600 rounded-full relative">
-                        <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
-                      </div>
-                    </div>
-                  ) : field.type === "select" ? (
-                    <select className="bg-slate-900/50 border border-slate-800 text-white p-4 rounded-2xl outline-none focus:border-blue-500/50 transition-all appearance-none">
-                      {field.options?.map(opt => <option key={opt}>{opt}</option>)}
-                    </select>
-                  ) : (
-                    <input 
-                      type={field.type} 
-                      placeholder={field.placeholder}
-                      className="bg-slate-900/50 border border-slate-800 text-white p-4 rounded-2xl outline-none focus:border-blue-500/50 transition-all placeholder:text-slate-600"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
         ))}
       </div>
