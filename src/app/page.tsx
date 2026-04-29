@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Sparkles, ArrowRight, Zap } from 'lucide-react'
+import Logo from '@/components/Logo'
 
 export default function LandingPage() {
   return (
@@ -11,10 +12,7 @@ export default function LandingPage() {
       {/* Navbar (Simplified) */}
       <nav className="relative z-10 max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Zap size={18} className="text-white" fill="currentColor" />
-          </div>
-          <span className="text-xl font-black text-white uppercase">Stryd</span>
+          <Logo size={32} />
         </div>
         <Link href="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">
           Sign In

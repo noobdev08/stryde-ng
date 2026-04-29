@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
 import { FlameKindling, Sparkles, Monitor } from "lucide-react"
+import Logo from '@/components/Logo'
 import Link from 'next/link'
 
 export default async function DashboardPage() {

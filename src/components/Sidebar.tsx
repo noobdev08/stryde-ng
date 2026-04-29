@@ -1,10 +1,14 @@
-"use client" // Required for the toggle state
-import { useState } from "react"
+"use client"
+
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { LayoutDashboard, Compass, BarChart3, Settings, LogOut, Menu, X } from "lucide-react"
+import Logo from "@/components/Logo"
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -13,48 +17,83 @@ export default function Sidebar() {
     { name: "Settings", href: "/settings", icon: Settings },
   ]
 
+  // Lock body scroll on mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto"
+  }, [isOpen])
+
   return (
     <>
-      {/* Mobile Header / Hamburger Button */}
+      {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-[#0b1120] border-b border-slate-800 fixed top-0 w-full z-50">
-        <p className="text-blue-500 font-bold text-xl">Stryd</p>
-        <button onClick={() => setIsOpen(!isOpen)} className="text-slate-400 p-2">
+        <Logo size={36} showText={false} />
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className="text-slate-400 p-2"
+        >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Sidebar Container */}
-      <div className={`
-        flex flex-col h-screen w-64 bg-[#0b1120] border-r border-slate-800/50 p-6 fixed z-40 transition-transform duration-300
-        lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      `}>
-        
-        <p className="text-blue-500 font-bold text-2xl mb-10 px-4 hidden lg:block">Stryd</p>
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed z-40 h-screen w-64 bg-[#0b1120] border-r border-slate-800/50
+          flex flex-col px-6 pt-20 lg:pt-6
+          transition-transform duration-300
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
+        {/* Logo */}
+        <div className="mb-10 flex justify-left ml-2">
+          <Logo size={32} showText={true} />
+        </div>
 
-        <nav className="flex flex-col gap-2 flex-1 mt-16 lg:mt-0">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.name}
-              href={link.href} 
-              onClick={() => setIsOpen(false)} // Close on click for mobile
-              className="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-xl transition-all group"
-            >
-              <link.icon size={20} className="group-hover:text-blue-400" />
-              <span className="font-medium">{link.name}</span>
-            </Link>
-          ))}
+        {/* Navigation */}
+        <nav className="flex flex-col gap-2 flex-1">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href
+
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-xl transition-all group
+                  ${
+                    isActive
+                      ? "bg-slate-800 text-white"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/60 hover:translate-x-1"
+                  }
+                `}
+              >
+                <link.icon
+                  size={20}
+                  className={
+                    isActive
+                      ? "text-blue-400"
+                      : "group-hover:text-blue-400"
+                  }
+                />
+                <span className="font-medium">{link.name}</span>
+              </Link>
+            )
+          })}
         </nav>
 
-        <button className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all cursor-pointer mt-auto">
+        {/* Logout */}
+        <button className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all mt-auto">
           <LogOut size={20} />
           <span className="font-medium">Log out</span>
         </button>
-      </div>
+      </aside>
 
-      {/* Mobile Overlay (closes menu when clicking outside) */}
+      {/* Overlay */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
