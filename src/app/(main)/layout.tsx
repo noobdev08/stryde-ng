@@ -1,15 +1,13 @@
 import Sidebar from '@/components/Sidebar'
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-[#0b1120]">
-      {/* 1. Sidebar needs a fixed width and should not shrink */}
-      <aside className="w-64 shrink-0 border-r border-gray-800">
-        <Sidebar />
-      </aside>
-
-      {/* 2. Main content takes the remaining space */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <Sidebar />
+      {/* On mobile (lg:hidden), we add pt-16 to push content 
+         below the fixed hamburger header 
+      */}
+      <div className="flex-1 lg:ml-64 pt-16 lg:pt-0">
         {children}
       </div>
     </div>
