@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkles, ArrowRight, Zap } from 'lucide-react'
+import { Sparkles, ArrowRight } from 'lucide-react'
 import Logo from '@/components/Logo'
 
 export default function LandingPage() {

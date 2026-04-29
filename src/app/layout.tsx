@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stryde",
+  title: "Stryd NG",
   description: "Execution is everything. Build your dev skills with daily challenges and projects.",
 };
 

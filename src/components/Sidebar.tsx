@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Compass, BarChart3, Settings, LogOut, Menu, X } from "lucide-react"
 import Logo from "@/components/Logo"
+import { logout } from "@/app/(auth)/actions"
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -84,9 +85,12 @@ export default function Sidebar() {
         </nav>
 
         {/* Logout */}
-        <button className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all mt-auto">
-          <LogOut size={20} />
-          <span className="font-medium">Log out</span>
+        <button 
+          onClick={logout}
+          className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all mt-auto"
+        >
+          <LogOut size={20}/>
+          <span className="font-medium cursor-pointer">Log out</span>
         </button>
       </aside>
 
