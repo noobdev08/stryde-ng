@@ -1,4 +1,5 @@
-import { User, Bell, Shield, Palette, Save } from 'lucide-react'
+import { logout } from "@/app/(auth)/actions"
+import { User, Bell, Shield, Palette, Save, LogOut } from 'lucide-react'
 
 export default function SettingsPage() {
   const sections = [
@@ -54,6 +55,32 @@ export default function SettingsPage() {
         ))}
       </div>
 
+      <div className="mt-6 space-y-6">
+        <div className="bg-[#0f172a] border border-red-500/10 rounded-3xl p-6 md:p-8">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-500/10 rounded-lg">
+                <Shield size={18} className="text-red-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">Account Security</h2>
+                <p className="text-slate-500 text-xs">End your current session on this device.</p>
+              </div>
+            </div>
+
+            <form action={logout}>
+              <button 
+                type="submit"
+                className="flex items-center gap-2 px-6 py-3 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-2xl font-bold transition-all cursor-pointer group"
+              >
+                <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
+                Logout
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
       {/* Mobile Save Button */}
       <div className="mt-8 md:hidden">
         <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">
