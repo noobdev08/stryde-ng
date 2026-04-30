@@ -2,8 +2,6 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
 import { FlameKindling, Sparkles, Monitor } from "lucide-react"
-import Logo from '@/components/Logo'
-import Link from 'next/link'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -74,6 +72,7 @@ export default async function DashboardPage() {
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Your Paths</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <PathCard
+            id="cmo87mrmd0000nwugta47bexk"
             title="Frontend Path"
             description="Master HTML, CSS, JavaScript, and React."
             icon="🛡️"
@@ -82,6 +81,7 @@ export default async function DashboardPage() {
           />
 
           <PathCard
+            id="cmo87mt1a0001nwugl8zup04b"
             title="Backend Path"
             description="Node.js, Express, and Databases."
             icon="⚙️"
@@ -91,6 +91,7 @@ export default async function DashboardPage() {
           />
 
           <PathCard
+            id="cmo87mt1c0002nwugvq0t7lpy"
             title="Fullstack Path"
             description="Build complete real-world applications."
             icon="🚀"
