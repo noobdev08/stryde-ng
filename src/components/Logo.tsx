@@ -5,7 +5,7 @@ export default function StrydLogo({ size = 40, showText = true }: { size?: numbe
     <div className="flex items-center gap-3 group cursor-pointer">
       <div className="relative transition-transform group-hover:scale-105 duration-300">
         <Image 
-          src="/logo.png"  // <-- use clean version
+          src="/logo.png"
           alt="Stryd Logo" 
           width={size} 
           height={size}

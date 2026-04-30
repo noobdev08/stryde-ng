@@ -28,8 +28,8 @@ export default function Sidebar() {
       {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-[#0b1120] border-b border-slate-800 fixed top-0 w-full z-50">
         <Logo size={36} showText={false} />
-        <button 
-          onClick={() => setIsOpen(!isOpen)} 
+        <button
+          onClick={() => setIsOpen(!isOpen)}
           className="text-slate-400 p-2"
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -47,7 +47,7 @@ export default function Sidebar() {
         `}
       >
         {/* Logo */}
-        <div className="mb-10 flex justify-left ml-2">
+        <div className="hidden lg:flex mb-10 justify-left ml-2">
           <Logo size={32} showText={true} />
         </div>
 
@@ -63,10 +63,9 @@ export default function Sidebar() {
                 onClick={() => setIsOpen(false)}
                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl transition-all group
-                  ${
-                    isActive
-                      ? "bg-slate-800 text-white"
-                      : "text-slate-400 hover:text-white hover:bg-slate-800/60 hover:translate-x-1"
+                  ${isActive
+                    ? "bg-slate-800 text-white"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/60 hover:translate-x-1"
                   }
                 `}
               >
@@ -85,11 +84,11 @@ export default function Sidebar() {
         </nav>
 
         {/* Logout */}
-        <button 
+        <button
           onClick={logout}
           className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all mt-auto"
         >
-          <LogOut size={20}/>
+          <LogOut size={20} />
           <span className="font-medium cursor-pointer">Log out</span>
         </button>
       </aside>

@@ -1,4 +1,5 @@
 import { logIn } from '@/app/(auth)/actions'
+import SubmitButton from '@/components/SubmitButton'
 import { Sparkles, Mail, Lock, Globe } from 'lucide-react'
 
 export default function LoginPage() {
@@ -64,12 +65,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all text-white font-bold shadow-lg shadow-blue-500/10 active:scale-[0.98] cursor-pointer mt-2"
-              >
-                Continue
-              </button>
+              <SubmitButton />
             </form>
 
             <div className="my-6 flex items-center gap-4 text-slate-600">

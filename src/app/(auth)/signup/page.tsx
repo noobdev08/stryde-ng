@@ -1,4 +1,5 @@
 import { signup } from '@/app/(auth)/actions'
+import SubmitButton from '@/components/SubmitButton'
 import { Rocket, User, Mail, Lock, Globe } from 'lucide-react'
 
 export default function SignupPage() {
@@ -80,12 +81,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 transition-all text-white font-bold shadow-lg shadow-blue-500/10 active:scale-[0.98] cursor-pointer mt-2"
-              >
-                Create Account
-              </button>
+              <SubmitButton text="Sign Up" />
             </form>
 
             <p className="text-sm text-slate-500 mt-8 text-center">
