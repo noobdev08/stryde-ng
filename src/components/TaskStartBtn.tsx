@@ -19,7 +19,7 @@ export function TaskStartButton({ href }: { href: string }) {
       onClick={handlePush}
       disabled={isNavigating}
       className={`
-        bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-8 py-2.5 rounded-lg transition-all flex items-center gap-2
+        bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-8 py-2.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer
         ${isNavigating ? 'opacity-70 cursor-wait' : 'hover:bg-blue-500 active:scale-95'}
       `}
     >

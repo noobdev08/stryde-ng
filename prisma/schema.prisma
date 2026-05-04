@@ -38,7 +38,9 @@ model Task {
   id           String         @id @default(cuid())
   title        String
   description  String
+  concept      String?
   resourceUrl  String?
+  youtubeUrl   String?
   order        Int
   stage        Stage          @relation(fields: [stageId], references: [id])
   stageId      String

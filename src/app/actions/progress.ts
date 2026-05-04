@@ -2,6 +2,7 @@
 import prisma from "@/utils/lib/prismaClient"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
 export async function completeTask(formData: FormData) {
     const supabase = await createClient()
@@ -28,4 +29,5 @@ export async function completeTask(formData: FormData) {
 
     // Refresh the data
     revalidatePath(`/paths/${pathId}/${stageId}`)
+    redirect(`/paths/${pathId}/${stageId}`)
 }

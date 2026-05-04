@@ -29,7 +29,7 @@ export default function SubmitButton({ label, completed }: SubmitButtonProps) {
       type="submit"
       disabled={pending}
       className={`
-        w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all
+        w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all cursor-pointer
         ${pending 
           ? 'bg-blue-600/50 cursor-wait opacity-80' 
           : 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.2)] active:scale-[0.98]'
