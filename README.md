@@ -122,6 +122,28 @@ Stryd helps developers master technology stacks by:
 - **Authentication**: Secure user accounts with Supabase
 - **Responsive Design**: Works on desktop and mobile devices
 
+## 📘 How to Use This Repo
+
+### Main Entry Points
+- `app/page.tsx` - Landing page for visitors and sign-in entry point
+- `(auth)/login/page.tsx` - Login page for existing users
+- `(auth)/signup/page.tsx` - Signup page for new users
+- `(main)/dashboard/page.tsx` - Authenticated dashboard view
+- `(main)/paths/page.tsx` - List of available learning paths
+- `(main)/progress/page.tsx` - Progress overview page
+- `(main)/settings/page.tsx` - User settings page
+- `(focus)/...` - Distraction-free path navigation and task flow
+
+### Repo Workflow
+- Edit UI in `src/app/...` and `src/components/...`
+- Update database shape in `prisma/schema.prisma`
+- Use `npx prisma generate` after schema changes
+- Use `npx prisma db push` to sync with PostgreSQL
+- Keep auth logic in `src/app/(auth)/actions.ts` and Supabase helpers in `src/utils/supabase/server.ts`
+
+### Important note
+The API folder contains endpoint routes, but the main UI currently uses server-side data fetching and server actions for most interactions. The `src/app/api/user/progress/` folder is present but empty, so progress updates are handled by `src/app/actions/progress.ts`.
+
 ## 🛠️ Tech Stack & Key Concepts
 
 ### Core Technologies
@@ -133,6 +155,11 @@ Stryd helps developers master technology stacks by:
 - **Supabase** - Authentication and real-time features
 - **Tailwind CSS v4** - Utility-first CSS framework
 - **Lucide React** - Beautiful icon library
+
+#### Prisma Client Setup
+- `src/utils/lib/prismaClient.ts` initializes Prisma using `@prisma/adapter-pg`
+- Uses a global cache object during development to avoid creating multiple Prisma clients
+- `DATABASE_URL` is read from environment variables
 
 ### Architecture Patterns
 
@@ -152,30 +179,45 @@ app/
 - `(focus)` - Distraction-free learning mode
 
 #### Server Actions
-Server actions allow running server-side code from client components:
+Server actions allow your form submissions and user actions to run securely on the server without a separate API route.
 
 ```typescript
-// In a component
+// In a page or component
 <form action={completeTask}>
   <input type="hidden" name="taskId" value={task.id} />
+  <input type="hidden" name="stageId" value={stage.id} />
+  <input type="hidden" name="pathId" value={path.id} />
   <button type="submit">Complete Task</button>
 </form>
 
-// Server action in actions/progress.ts
+// Server action in src/app/actions/progress.ts
 "use server"
 export async function completeTask(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
   const taskId = formData.get("taskId") as string
-  // Server-side logic here
-  await prisma.userProgress.create({ ... })
-  revalidatePath('/current-page') // Refresh data
+  const stageId = formData.get("stageId") as string
+  const pathId = formData.get("pathId") as string
+
+  await prisma.userProgress.upsert({
+    where: { userId_taskId: { userId: user.id, taskId } },
+    update: { completedAt: new Date() },
+    create: { userId: user.id, taskId, completedAt: new Date() }
+  })
+
+  revalidatePath(`/paths/${pathId}/${stageId}`)
+  redirect(`/paths/${pathId}/${stageId}`)
 }
 ```
 
 **Key Benefits**:
-- No API endpoints needed for simple mutations
-- Automatic form handling
-- Server-side validation and security
-- Built-in revalidation for fresh data
+- No separate API endpoint required for this task mutation
+- Built-in form handling in server components
+- Server-side auth check with Supabase
+- Uses `revalidatePath()` to refresh the page data after completion
+- Uses `redirect()` to navigate after the action succeeds
 
 #### Database Schema (Prisma)
 
@@ -230,24 +272,26 @@ model UserProgress {
 #### Authentication with Supabase
 
 ```typescript
-// Server-side auth check
+// Server-side auth check in a page or server action
 const supabase = await createClient()
-const { data: { user } } = await supabase.auth.getUser()
-if (!user) redirect('/login')
+const { data: { user }, error } = await supabase.auth.getUser()
+if (error || !user) redirect('/login')
 ```
 
 ```typescript
-// Client-side auth
-const supabase = createClient()
-const { data, error } = await supabase.auth.signInWithPassword({
-  email, password
-})
+// Signup / login / logout actions in src/app/(auth)/actions.ts
+const supabase = await createClient()
+await supabase.auth.signUp({ email, password, options: { data: { name } } })
+await supabase.auth.signInWithPassword({ email, password })
+await supabase.auth.signOut()
 ```
 
 **Supabase Concepts**:
-- **SSR Helper**: `createClient()` creates Supabase client for server components
-- **User Metadata**: Store additional user info like name in `user.user_metadata`
-- **Row Level Security**: Database policies ensure users only see their own data
+- **SSR Helper**: `src/utils/supabase/server.ts` uses `createServerClient()` from `@supabase/ssr`
+- **Cookie forwarding**: The helper reads and sets cookies from `next/headers` so auth works in server components
+- **User metadata**: Extra fields like `name` are stored in `user.user_metadata`
+- **Server-side auth**: Route protection is enforced in server pages by redirecting if `user` is missing
+- **Logout flow**: Calls `signOut()` and then redirects to the homepage
 
 #### Progress Calculation
 
@@ -483,9 +527,9 @@ revalidatePath('/current-path')
 
 ### RESTful Endpoints
 - `GET /api/paths` - Fetch all learning paths
-- `GET /api/paths/[id]` - Fetch specific path with stages/tasks
-- `GET /api/stages/[id]/tasks` - Fetch tasks for a stage
-- `POST /api/tasks/[id]` - Update task progress
+- `GET /api/paths/[pathId]` - Fetch all stages in a path
+- `GET /api/stages/[stageId]/tasks` - Fetch all tasks for a stage plus user progress
+- `POST /api/tasks/[taskId]` - Create a `UserProgress` record for the current user and task
 
 ### Server Action Pattern
 Instead of traditional REST APIs, most mutations use Next.js server actions for:

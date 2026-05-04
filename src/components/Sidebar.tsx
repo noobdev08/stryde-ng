@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Compass, BarChart3, Settings, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, Compass, BarChart3, Settings, LogOut, Menu, X, Tag } from "lucide-react"
 import Logo from "@/components/Logo"
 import { logout } from "@/app/(auth)/actions"
 
@@ -15,6 +15,7 @@ export default function Sidebar() {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Paths", href: "/paths", icon: Compass },
     { name: "Progress", href: "/progress", icon: BarChart3 },
+    { name: "Pricing", href: "/pricing", icon: Tag },
     { name: "Settings", href: "/settings", icon: Settings },
   ]
 

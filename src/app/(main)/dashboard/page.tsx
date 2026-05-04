@@ -10,6 +10,38 @@ export default async function DashboardPage() {
 
   if (!user) redirect('/login') //
 
+  // 0. Calculate streak from UserProgress
+  const allProgress = await prisma.userProgress.findMany({
+    where: { userId: user.id },
+    select: { completedAt: true },
+    orderBy: { completedAt: 'desc' }
+  })
+
+  // Get unique days the user completed something (as YYYY-MM-DD strings)
+  const uniqueDays = [...new Set(
+    allProgress.map(p => p.completedAt.toISOString().split('T')[0])
+  )]
+
+  // Walk backwards from today, count consecutive days
+  const today = new Date().toISOString().split('T')[0]
+  let streak = 0
+  const current = new Date()
+
+  while (true) {
+    const dateStr = current.toISOString().split('T')[0]
+    if (uniqueDays.includes(dateStr)) {
+      streak++
+      current.setDate(current.getDate() - 1)
+    } else {
+      // Allow today to be missing (they haven't coded yet today)
+      if (dateStr === today && streak === 0) {
+        current.setDate(current.getDate() - 1)
+        continue
+      }
+      break
+    }
+  }
+
   // 1. Fetch all Paths with nested Stages and Tasks, 
   // including the user's progress for each task.
   const paths = await prisma.path.findMany({
@@ -64,7 +96,7 @@ export default async function DashboardPage() {
           <FlameKindling size={18} className="text-orange-500 fill-orange-500/20" />
           <div className="flex flex-row md:flex-col items-center gap-2 md:gap-0 leading-none">
             <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Streak</span>
-            <span className="text-lg font-bold text-white">3</span>
+            <span className="text-lg font-bold text-white">{streak}</span>
           </div>
         </div>
       </div>
@@ -141,9 +173,15 @@ export default async function DashboardPage() {
             </p>
           </div>
           {/* Add other stats like Streak and Time here */}
+          <div className="bg-[#0f172a] border border-gray-800 p-5 rounded-2xl">
+            <p className="text-xs text-gray-500 font-medium mb-1">Current Streak</p>
+            <p className="text-2xl font-bold text-white flex items-center gap-2">
+              {streak}
+              <span className="text-orange-500 text-lg">🔥</span>
+            </p>
+          </div>
         </div>
       </section>
     </main>
   )
 }
-
