@@ -65,7 +65,7 @@ const plans = [
 
 export default function PricingPage() {
   return (
-    <main className="min-h-screen bg-[#020617] text-white">
+    <main className="min-h-screen text-white">
       <div className="max-w-5xl mx-auto px-6 pt-12 pb-24">
 
         {/* Back */}

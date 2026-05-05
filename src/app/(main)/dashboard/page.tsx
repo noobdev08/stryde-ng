@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
 import { FlameKindling, Sparkles, Monitor, Layout, Database, Rocket } from "lucide-react"
 import prisma from '@/utils/lib/prismaClient'
+import Link from 'next/link';
 
 export default async function DashboardPage() {
   const supabase = await createClient() //
@@ -76,7 +77,7 @@ export default async function DashboardPage() {
   // Logic: Find the first incomplete task in the first unlocked path
   const activePath = pathsWithProgress.find(p => p.progressPercent < 100 && !p.isLocked) || pathsWithProgress[0]
   const nextTask = activePath?.stages
-    .flatMap(s => s.tasks.map(t => ({ ...t, stageName: s.name })))
+    .flatMap(s => s.tasks.map(t => ({ ...t, stageName: s.name, stageId: s.id })))
     .find(t => t.userProgress.length === 0)
 
   return (
@@ -132,9 +133,17 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-2xl font-bold transition-all cursor-pointer z-10">
-            Continue
-          </button>
+          <Link
+            href={nextTask ? `/paths/${activePath.id}/${nextTask.stageId}/${nextTask.id}` : '#'}
+            className="w-full md:w-auto z-10"
+          >
+            <button
+              className={`w-full bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-2xl font-bold transition-all cursor-pointer ${!nextTask && 'opacity-50 cursor-not-allowed'}`}
+              disabled={!nextTask}
+            >
+              {nextTask ? 'Continue' : 'All Caught Up!'}
+            </button>
+          </Link>
         </div>
       </section>
 
