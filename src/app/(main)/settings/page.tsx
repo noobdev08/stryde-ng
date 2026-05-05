@@ -1,9 +1,10 @@
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 import prisma from "@/utils/lib/prismaClient"
-import { Cat } from "lucide-react"
+import { Cat, LogOut } from "lucide-react"
 import { saveGithubUsername } from "@/app/actions/progress"
 import { SubmitButton } from "@/components/usernameButton"
+import { logout } from "@/app/(auth)/actions"
 
 export default async function SettingsPage({
   searchParams
@@ -28,7 +29,7 @@ export default async function SettingsPage({
         <p className="text-slate-400 text-sm mb-10">Manage your account details</p>
 
         {/* GitHub Username */}
-        <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
+        <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6 mb-6">
           <div className="flex items-center gap-3 mb-6">
             <Cat size={20} className="text-slate-400" />
             <div>
@@ -55,6 +56,33 @@ export default async function SettingsPage({
             />
             <SubmitButton />
           </form>
+        </div>
+
+        {/* Account Section */}
+        <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <LogOut size={20} className="text-slate-400" />
+            <div>
+              <p className="text-sm font-bold text-white">Account</p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Sign out of your STRYD account
+              </p>
+            </div>
+          </div>
+
+          <form action={logout}>
+            <button
+              type="submit"
+              className="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-medium py-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+            >
+              <LogOut size={18} />
+              Log out
+            </button>
+          </form>
+
+          <p className="text-xs text-slate-600 mt-4 text-center">
+            Make sure your work is pushed to GitHub before logging out
+          </p>
         </div>
       </div>
     </main>

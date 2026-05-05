@@ -1,8 +1,15 @@
+"use client"
+
 import { signup } from '@/app/(auth)/actions'
 import SubmitButton from '@/components/SubmitButton'
 import { Rocket, User, Mail, Lock, Globe } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 export default function SignupPage() {
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error')
+  const success = searchParams.get('signup')
+
   return (
     <div className="min-h-screen bg-[#0b1120] flex items-center justify-center px-4">
       
@@ -34,6 +41,20 @@ export default function SignupPage() {
               Create account
             </h2>
             <p className="text-slate-500 text-sm mb-8">Start your execution journey today.</p>
+
+            {/* Success message */}
+            {success && (
+              <div className="mb-6 p-3 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm">
+                Account created! Please check your email to confirm your account before logging in.
+              </div>
+            )}
+
+            {/* Error message display */}
+            {error && (
+              <div className="mb-6 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                {decodeURIComponent(error)}
+              </div>
+            )}
 
             <form action={signup} className="space-y-4">
               {/* Name Input */}

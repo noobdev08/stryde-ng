@@ -1,8 +1,14 @@
+"use client"
+
 import { logIn } from '@/app/(auth)/actions'
 import SubmitButton from '@/components/SubmitButton'
 import { Sparkles, Mail, Lock, Globe } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error')
+
   return (
     <div className="min-h-screen bg-[#0b1120] flex items-center justify-center px-4">
       
@@ -11,7 +17,6 @@ export default function LoginPage() {
 
         {/* LEFT SIDE (Branding) */}
         <div className="hidden md:flex flex-col justify-center p-12 bg-gradient-to-br from-blue-600/20 to-[#0b1120] relative">
-          {/* Subtle Glow Effect */}
           <div className="absolute top-0 left-0 w-full h-full bg-blue-500/5 blur-[100px]" />
           
           <div className="relative z-10">
@@ -35,6 +40,13 @@ export default function LoginPage() {
               Log in
             </h2>
             <p className="text-slate-500 text-sm mb-8">Welcome back, Developer.</p>
+
+            {/* Error message display */}
+            {error && (
+              <div className="mb-6 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                {decodeURIComponent(error)}
+              </div>
+            )}
 
             <form action={logIn} className="space-y-4">
               <div className="space-y-1.5">

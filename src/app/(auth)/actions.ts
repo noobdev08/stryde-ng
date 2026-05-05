@@ -19,17 +19,29 @@ export async function signup(formData: FormData) {
 
   if (error) {
     console.log(error.message)
-    return redirect('/error')
+    // Map error to user-friendly message
+    let errorMessage = ''
+    if (error.message.includes('User already registered')) {
+      errorMessage = 'An account already exists with this email'
+    } else if (error.message.includes('Password should be at least 6 characters')) {
+      errorMessage = 'Password must be at least 6 characters'
+    } else if (error.message.includes('email')) {
+      errorMessage = 'Please enter a valid email address'
+    } else {
+      errorMessage = 'Something went wrong. Please try again.'
+    }
+    return redirect(`/signup?error=${encodeURIComponent(errorMessage)}`)
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  // Optional: Show success message before redirect
+  redirect('/dashboard?signup=success')
 }
 
 export async function logIn(formData: FormData) {
   const supabase = await createClient()
 
-   const data = {
+  const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
@@ -38,7 +50,15 @@ export async function logIn(formData: FormData) {
 
   if (error) {
     console.log(error.message)
-    return redirect('/error')
+    let errorMessage = ''
+    if (error.message.includes('Invalid login credentials')) {
+      errorMessage = 'Invalid email or password'
+    } else if (error.message.includes('Email not confirmed')) {
+      errorMessage = 'Please confirm your email address before logging in'
+    } else {
+      errorMessage = 'Something went wrong. Please try again.'
+    }
+    return redirect(`/login?error=${encodeURIComponent(errorMessage)}`)
   }
 
   revalidatePath('/', 'layout')
@@ -47,14 +67,9 @@ export async function logIn(formData: FormData) {
 
 export async function logout() {
   const supabase = await createClient()
-
-  // 1. Sign out from Supabase (clears server-side session)
   const { error } = await supabase.auth.signOut()
-
   if (error) {
     console.error('Logout error:', error.message)
   }
-
-  // 2. Clear the cache and redirect to the home page
   redirect('/')
 }
