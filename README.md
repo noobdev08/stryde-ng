@@ -14,10 +14,16 @@ stryd-ng/
 ├── node_modules/
 ├── package-lock.json
 ├── package.json
+├── PLAN_GATING.md
 ├── postcss.config.mjs
 ├── prisma/
 │   ├── schema.prisma
-│   └── seed.ts
+│   ├── seed.ts
+│   ├── config.ts
+│   └── migrations/
+│       ├── migration_lock.toml
+│       └── 20260505041216_add_plan_gating_and_github/
+│           └── migration.sql
 ├── prisma.config.ts
 ├── public/
 │   ├── file.svg
@@ -52,10 +58,12 @@ stryd-ng/
 │   │   │   ├── loading.tsx
 │   │   │   ├── paths/
 │   │   │   │   └── page.tsx
+│   │   │   ├── pricing/
+│   │   │   │   └── page.tsx
 │   │   │   ├── progress/
 │   │   │   │   └── page.tsx
-│   │   │   └── settings/
-│   │   │       └── page.tsx
+│   │   │   ├── settings/
+│   │   │   │   └── page.tsx
 │   │   ├── actions/
 │   │   │   └── progress.ts
 │   │   ├── api/
@@ -83,8 +91,11 @@ stryd-ng/
 │   │   ├── PathCard.tsx
 │   │   ├── Sidebar.tsx
 │   │   ├── StageButton.tsx
+│   │   ├── StageList.tsx
 │   │   ├── SubmitButton.tsx
-│   │   └── TaskStartBtn.tsx
+│   │   ├── TaskStartBtn.tsx
+│   │   ├── UpgradeModal.tsx
+│   │   └── usernameButton.tsx
 │   ├── generated/
 │   │   └── prisma/
 │   │       ├── browser.ts
@@ -99,11 +110,14 @@ stryd-ng/
 │   │       │   ├── Path.ts
 │   │       │   ├── Stage.ts
 │   │       │   ├── Task.ts
+│   │       │   ├── UserProfile.ts
 │   │       │   └── UserProgress.ts
 │   │       └── models.ts
 │   └── utils/
 │       ├── lib/
+│       │   ├── github.ts
 │       │   ├── paths.ts
+│       │   ├── plans.ts
 │       │   └── prismaClient.ts
 │       └── supabase/
 │           └── server.ts
@@ -119,10 +133,35 @@ Stryd helps developers master technology stacks by:
 - **Hands-on Tasks**: Each lesson includes practical exercises and projects
 - **Progress Tracking**: Visual progress bars and completion tracking
 - **Streak System**: Daily coding streaks to maintain momentum
+- **Plan Gating**: Premium features with GitHub verification for advanced content
 - **Authentication**: Secure user accounts with Supabase
 - **Responsive Design**: Works on desktop and mobile devices
 
-## 📘 How to Use This Repo
+## �️ Setup Instructions
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Set up environment variables**:
+   - Copy `.env.local` from `.env` template
+   - Configure `DATABASE_URL` for PostgreSQL
+   - Set up Supabase credentials
+
+3. **Set up the database**:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   npx prisma db seed
+   ```
+
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+## �📘 How to Use This Repo
 
 ### Main Entry Points
 - `app/page.tsx` - Landing page for visitors and sign-in entry point
@@ -130,8 +169,9 @@ Stryd helps developers master technology stacks by:
 - `(auth)/signup/page.tsx` - Signup page for new users
 - `(main)/dashboard/page.tsx` - Authenticated dashboard view
 - `(main)/paths/page.tsx` - List of available learning paths
+- `(main)/pricing/page.tsx` - Pricing and plan gating
 - `(main)/progress/page.tsx` - Progress overview page
-- `(main)/settings/page.tsx` - User settings page
+- `(main)/settings/page.tsx` - User settings page (GitHub username, logout)
 - `(focus)/...` - Distraction-free path navigation and task flow
 
 ### Repo Workflow
@@ -195,11 +235,27 @@ Server actions allow your form submissions and user actions to run securely on t
 export async function completeTask(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
+  if (!user) redirect('/login')
 
   const taskId = formData.get("taskId") as string
   const stageId = formData.get("stageId") as string
   const pathId = formData.get("pathId") as string
+
+  const [stage, profile] = await Promise.all([
+    prisma.stage.findUnique({ where: { id: stageId }, select: { expectedRepo: true } }),
+    prisma.userProfile.findUnique({ where: { userId: user.id }, select: { githubUsername: true } })
+  ])
+
+  if (stage?.expectedRepo) {
+    if (!profile?.githubUsername) {
+      redirect(`/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent("Set your GitHub username in Settings before completing tasks.")}`)
+    }
+
+    const repoExists = await checkGitHubRepo(profile.githubUsername, stage.expectedRepo)
+    if (!repoExists) {
+      redirect(`/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent(`Repo not found: github.com/${profile.githubUsername}/${stage.expectedRepo} — make sure it's public and you've pushed your work.`)}`)
+    }
+  }
 
   await prisma.userProgress.upsert({
     where: { userId_taskId: { userId: user.id, taskId } },
@@ -216,6 +272,7 @@ export async function completeTask(formData: FormData) {
 - No separate API endpoint required for this task mutation
 - Built-in form handling in server components
 - Server-side auth check with Supabase
+- Verifies GitHub repo existence when a stage requires it
 - Uses `revalidatePath()` to refresh the page data after completion
 - Uses `redirect()` to navigate after the action succeeds
 
@@ -223,44 +280,60 @@ export async function completeTask(formData: FormData) {
 
 ```prisma
 model Path {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  isLocked    Boolean  @default(false)
-  order       Int      // Display order
-  stages      Stage[]
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  isLocked     Boolean  @default(false)
+  requiredPlan String   @default("free")
+  order        Int
+  stages       Stage[]
+  createdAt    DateTime @default(now())
 }
 
 model Stage {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  order       Int
-  isLocked    Boolean  @default(true)
-  path        Path     @relation(fields: [pathId], references: [id])
-  pathId      String
-  tasks       Task[]
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  order        Int
+  isLocked     Boolean  @default(true)
+  requiredPlan String   @default("free")
+  expectedRepo String?
+  path         Path     @relation(fields: [pathId], references: [id])
+  pathId       String
+  tasks        Task[]
+  createdAt    DateTime @default(now())
 }
 
 model Task {
   id           String         @id @default(cuid())
   title        String
   description  String
-  resourceUrl  String?       // Link to tutorial/docs
+  concept      String?
+  instruction  String?
+  resourceUrl  String?
+  youtubeUrl   String?
   order        Int
   stage        Stage          @relation(fields: [stageId], references: [id])
   stageId      String
   userProgress UserProgress[]
+  createdAt    DateTime       @default(now())
+}
+
+model UserProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  githubUsername String?
+  createdAt      DateTime @default(now())
 }
 
 model UserProgress {
   id          String   @id @default(cuid())
-  userId      String   // From Supabase auth
+  userId      String
   task        Task     @relation(fields: [taskId], references: [id])
   taskId      String
   completedAt DateTime @default(now())
 
-  @@unique([userId, taskId]) // One completion per user-task
+  @@unique([userId, taskId])
 }
 ```
 
@@ -268,6 +341,7 @@ model UserProgress {
 - Path → Stages (1:many)
 - Stage → Tasks (1:many)
 - Task → UserProgress (1:many)
+- UserProfile stores GitHub usernames for authenticated users
 
 #### Authentication with Supabase
 
@@ -316,7 +390,9 @@ src/
 │   ├── (main)/            # Protected app pages
 │   │   ├── dashboard/     # User dashboard
 │   │   ├── paths/         # Browse learning paths
-│   │   └── progress/      # Progress overview
+│   │   ├── pricing/       # Pricing and plan gating
+│   │   ├── progress/      # Progress overview
+│   │   └── settings/      # User profile and GitHub settings
 │   ├── (focus)/           # Learning mode (distraction-free)
 │   ├── api/               # API routes
 │   │   ├── paths/         # CRUD for paths
@@ -326,6 +402,8 @@ src/
 ├── components/            # Reusable UI components
 │   ├── PathCard.tsx      # Path display card
 │   ├── Sidebar.tsx       # Navigation sidebar
+│   ├── SubmitButton.tsx  # Generic button for auth forms
+│   ├── usernameButton.tsx# Save GitHub username button
 │   └── TaskStartBtn.tsx  # Task interaction button
 ├── generated/             # Prisma generated types
 └── utils/                 # Utility functions
