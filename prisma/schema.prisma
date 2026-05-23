@@ -31,6 +31,7 @@ model Stage {
   isLocked     Boolean  @default(true)
   requiredPlan String   @default("free")
   expectedRepo String?
+  validationType String @default("none")
   path         Path     @relation(fields: [pathId], references: [id])
   pathId       String
   tasks        Task[]

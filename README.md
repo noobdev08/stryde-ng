@@ -1,222 +1,108 @@
 # Stryd - Developer Learning Platform
 
-```
-stryd-ng/
-├── .env
-├── .env.local
-├── .git/
-├── .gitignore
-├── .next/
-├── eslint.config.mjs
-├── middleware.ts
-├── next-env.d.ts
-├── next.config.ts
-├── node_modules/
-├── package-lock.json
-├── package.json
-├── PLAN_GATING.md
-├── postcss.config.mjs
-├── prisma/
-│   ├── schema.prisma
-│   ├── seed.ts
-│   ├── config.ts
-│   └── migrations/
-│       ├── migration_lock.toml
-│       └── 20260505041216_add_plan_gating_and_github/
-│           └── migration.sql
-├── prisma.config.ts
-├── public/
-│   ├── file.svg
-│   ├── globe.svg
-│   ├── logo.png
-│   ├── next.svg
-│   ├── vercel.svg
-│   └── window.svg
-├── README.md
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── actions.ts
-│   │   │   ├── login/
-│   │   │   │   └── page.tsx
-│   │   │   └── signup/
-│   │   │       └── page.tsx
-│   │   ├── (focus)/
-│   │   │   ├── layout.tsx
-│   │   │   ├── loading.tsx
-│   │   │   └── paths/
-│   │   │       └── [id]/
-│   │   │           ├── page.tsx
-│   │   │           └── [stageId]/
-│   │   │               ├── page.tsx
-│   │   │               └── [taskId]/
-│   │   │                   └── page.tsx
-│   │   ├── (main)/
-│   │   │   ├── dashboard/
-│   │   │   │   └── page.tsx
-│   │   │   ├── layout.tsx
-│   │   │   ├── loading.tsx
-│   │   │   ├── paths/
-│   │   │   │   └── page.tsx
-│   │   │   ├── pricing/
-│   │   │   │   └── page.tsx
-│   │   │   ├── progress/
-│   │   │   │   └── page.tsx
-│   │   │   ├── settings/
-│   │   │   │   └── page.tsx
-│   │   ├── actions/
-│   │   │   └── progress.ts
-│   │   ├── api/
-│   │   │   ├── paths/
-│   │   │   │   ├── route.ts
-│   │   │   │   └── [pathId]/
-│   │   │   │       └── route.ts
-│   │   │   ├── stages/
-│   │   │   │   └── [stageId]/
-│   │   │   │       └── tasks/
-│   │   │   │           └── route.ts
-│   │   │   ├── tasks/
-│   │   │   │   └── [taskId]/
-│   │   │   │       └── route.ts
-│   │   │   └── user/
-│   │   │       └── progress/
-│   │   ├── error/
-│   │   │   └── page.tsx
-│   │   ├── globals.css
-│   │   ├── icon.png
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   ├── components/
-│   │   ├── Logo.tsx
-│   │   ├── PathCard.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── StageButton.tsx
-│   │   ├── StageList.tsx
-│   │   ├── SubmitButton.tsx
-│   │   ├── TaskStartBtn.tsx
-│   │   ├── UpgradeModal.tsx
-│   │   └── usernameButton.tsx
-│   ├── generated/
-│   │   └── prisma/
-│   │       ├── browser.ts
-│   │       ├── client.ts
-│   │       ├── commonInputTypes.ts
-│   │       ├── enums.ts
-│   │       ├── internal/
-│   │       │   ├── class.ts
-│   │       │   ├── prismaNamespace.ts
-│   │       │   └── prismaNamespaceBrowser.ts
-│   │       ├── models/
-│   │       │   ├── Path.ts
-│   │       │   ├── Stage.ts
-│   │       │   ├── Task.ts
-│   │       │   ├── UserProfile.ts
-│   │       │   └── UserProgress.ts
-│   │       └── models.ts
-│   └── utils/
-│       ├── lib/
-│       │   ├── github.ts
-│       │   ├── paths.ts
-│       │   ├── plans.ts
-│       │   └── prismaClient.ts
-│       └── supabase/
-│           └── server.ts
-└── tsconfig.json
-```
-
-Stryd is an execution-focused learning platform designed for developers who want to build real projects instead of just watching tutorials. It provides structured learning paths with hands-on tasks, progress tracking, and momentum building through streaks and achievements.
+Stryd is an execution-focused developer learning platform built with Next.js, TypeScript, Prisma, PostgreSQL, and Supabase. The MVP is centered around structured learning paths, task completion tracking, and GitHub repo validation for gated stages.
 
 ## 🚀 What This App Does
 
-Stryd helps developers master technology stacks by:
-- **Structured Learning Paths**: Organized curriculum from basics to advanced concepts
-- **Hands-on Tasks**: Each lesson includes practical exercises and projects
-- **Progress Tracking**: Visual progress bars and completion tracking
-- **Streak System**: Daily coding streaks to maintain momentum
-- **Plan Gating**: Premium features with GitHub verification for advanced content
-- **Authentication**: Secure user accounts with Supabase
-- **Responsive Design**: Works on desktop and mobile devices
+- Structured learning paths with ordered paths, stages, and tasks
+- Hand-off task completion tracking stored per user in the database
+- GitHub repository validation for stages using `validationType === "repo_exists"`
+- Plan gating with `free`, `basic`, and `pro` levels
+- Supabase authentication and server-side session handling
+- Focused learning mode with distraction-free path/stage/task navigation
 
-## �️ Setup Instructions
+## ⚙️ Setup Instructions
 
-1. **Install dependencies**:
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. **Set up environment variables**:
-   - Copy `.env.local` from `.env` template
-   - Configure `DATABASE_URL` for PostgreSQL
-   - Set up Supabase credentials
+2. Configure environment variables:
+   - Copy `.env.local` from `.env` if needed
+   - Set `DATABASE_URL` for PostgreSQL
+   - Add Supabase credentials required by `src/utils/supabase/server.ts`
 
-3. **Set up the database**:
+3. Initialize the database and seed data:
    ```bash
    npx prisma generate
    npx prisma db push
    npx prisma db seed
    ```
 
-4. **Run the development server**:
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-## �📘 How to Use This Repo
+> The repository is configured with Prisma seed through `package.json` using `node --loader ts-node/esm prisma/seed.ts`.
 
-### Main Entry Points
-- `app/page.tsx` - Landing page for visitors and sign-in entry point
-- `(auth)/login/page.tsx` - Login page for existing users
-- `(auth)/signup/page.tsx` - Signup page for new users
-- `(main)/dashboard/page.tsx` - Authenticated dashboard view
-- `(main)/paths/page.tsx` - List of available learning paths
-- `(main)/pricing/page.tsx` - Pricing and plan gating
-- `(main)/progress/page.tsx` - Progress overview page
-- `(main)/settings/page.tsx` - User settings page (GitHub username, logout)
-- `(focus)/...` - Distraction-free path navigation and task flow
+## 🔧 Current App Structure
 
-### Repo Workflow
-- Edit UI in `src/app/...` and `src/components/...`
-- Update database shape in `prisma/schema.prisma`
-- Use `npx prisma generate` after schema changes
-- Use `npx prisma db push` to sync with PostgreSQL
-- Keep auth logic in `src/app/(auth)/actions.ts` and Supabase helpers in `src/utils/supabase/server.ts`
+- `src/app/page.tsx` — public landing page
+- `src/app/(auth)/login/page.tsx` — login page
+- `src/app/(auth)/signup/page.tsx` — signup page
+- `src/app/(main)/dashboard/page.tsx` — authenticated dashboard
+- `src/app/(main)/paths/page.tsx` — available learning paths
+- `src/app/(main)/pricing/page.tsx` — plan gating / pricing page
+- `src/app/(main)/progress/page.tsx` — progress overview
+- `src/app/(main)/settings/page.tsx` — user settings and GitHub username
+- `src/app/(focus)/paths/[id]/[stageId]/[taskId]/page.tsx` — focused task flow
+- `src/app/actions/progress.ts` — server actions for task completion and GitHub username saving
+- `prisma/schema.prisma` — Prisma data model for paths, stages, tasks, profiles, and progress
+- `prisma/seed.ts` — seed script that creates initial paths, stages, and tasks
 
-### Important note
-The API folder contains endpoint routes, but the main UI currently uses server-side data fetching and server actions for most interactions. The `src/app/api/user/progress/` folder is present but empty, so progress updates are handled by `src/app/actions/progress.ts`.
+## 🧠 Seed Script Details (`prisma/seed.ts`)
 
-## 🛠️ Tech Stack & Key Concepts
+- Clears existing seedable data: `UserProgress`, `Task`, `Stage`, and `Path`
+- Creates initial `Path` records such as `Dev Environment` and `Frontend`
+- Creates stage records with `requiredPlan`, `isLocked`, `expectedRepo`, and `validationType`
+- Creates detailed task records with `title`, `description`, `concept`, `instruction`, `resourceUrl`, `youtubeUrl`, and ordering
+- Some stages are gated by GitHub repo validation and require a specific repo name to unlock
 
-### Core Technologies
-- **Next.js 16** - React framework with App Router for server-side rendering
-- **React 19** - UI library with modern hooks and concurrent features
-- **TypeScript** - Type-safe JavaScript for better development experience
-- **Prisma** - Database ORM with type-safe queries
-- **PostgreSQL** - Relational database via Prisma adapter
-- **Supabase** - Authentication and real-time features
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **Lucide React** - Beautiful icon library
+## ✅ Task Completion & Validation (`src/app/actions/progress.ts`)
 
-#### Prisma Client Setup
-- `src/utils/lib/prismaClient.ts` initializes Prisma using `@prisma/adapter-pg`
-- Uses a global cache object during development to avoid creating multiple Prisma clients
-- `DATABASE_URL` is read from environment variables
+- `completeTask(formData)` is the main server action used to mark tasks complete
+- It validates the currently authenticated Supabase user and redirects to `/login` if none exists
+- It loads stage metadata and the current user profile at the same time
+- If `validationType === "repo_exists"`, it checks GitHub for the expected repo name using the saved GitHub username
+- On validation failure, it redirects back to the task page with an error query string
+- On success, it upserts the `UserProgress` entry and invalidates the stage path cache
+- `saveGithubUsername(formData)` stores or updates the user's GitHub username in `UserProfile`
 
-### Architecture Patterns
+## 📦 Prisma Schema Overview (`prisma/schema.prisma`)
 
-#### Next.js App Router
-```
-app/
-├── (auth)/          # Route groups for auth pages (login/signup)
-├── (main)/          # Protected routes for authenticated users
-├── (focus)/         # Focused learning mode routes
-├── api/             # API routes for data fetching
-└── globals.css      # Global styles
-```
+The schema includes:
 
-**Route Groups**: Parentheses `()` create route groups that organize pages without affecting URLs. Useful for:
-- `(auth)` - Authentication pages
-- `(main)` - Main app pages (dashboard, paths, etc.)
-- `(focus)` - Distraction-free learning mode
+- `Path` — learning path container, ordered via `order`, gated by `requiredPlan`
+- `Stage` — belongs to a path, can require GitHub repo validation using `expectedRepo` and `validationType`
+- `Task` — belongs to a stage, includes instructional fields and ordering
+- `UserProfile` — stores `githubUsername` for GitHub validation
+- `UserProgress` — records per-user completed tasks and enforces a unique `(userId, taskId)` constraint
+
+The Prisma generator outputs client code to `src/generated/prisma`, and the database provider is PostgreSQL.
+
+## 📌 Important Notes
+
+- Progress updates are handled by `src/app/actions/progress.ts`, not primarily through API routes.
+- `src/app/api/user/progress/` exists but is not the main completion flow.
+- Supabase is used for auth; Prisma is used for application data.
+- The app supports route groups `(auth)`, `(main)`, and `(focus)` for cleaner page organization.
+
+## 🛠 Useful Scripts
+
+- `npm run dev` — start the Next.js dev server
+- `npm run build` — generate Prisma client and build the app
+- `npm start` — start production server
+- `npm run lint` — run ESLint
+
+## 🚀 Contributor Workflow
+
+- Update `prisma/schema.prisma` for any data model changes
+- Run `npx prisma generate` after schema changes
+- Update `prisma/seed.ts` if seeded path/stage/task data changes
+- Use `src/utils/lib/plans.ts` for plan gating logic
+- Use `src/utils/supabase/server.ts` for Supabase server-side auth
 
 #### Server Actions
 Server actions allow your form submissions and user actions to run securely on the server without a separate API route.

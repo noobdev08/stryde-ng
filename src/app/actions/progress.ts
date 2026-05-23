@@ -7,11 +7,21 @@ import { redirect } from "next/navigation"
 
 async function checkGitHubRepo(username: string, repo: string): Promise<boolean> {
   try {
-    const res = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
-      headers: { Accept: "application/vnd.github+json" },
-      cache: "no-store",
-    })
-    return res.status === 200
+    const res = await fetch(
+      `https://api.github.com/repos/${username}/${repo}`,
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+        },
+        cache: "no-store",
+      }
+    )
+
+    if (res.status === 200) return true
+    if (res.status === 404) return false
+
+    // treat rate limit / API issues as "temporary failure"
+    return false
   } catch {
     return false
   }
@@ -30,7 +40,10 @@ export async function completeTask(formData: FormData) {
   const [stage, profile] = await Promise.all([
     prisma.stage.findUnique({
       where: { id: stageId },
-      select: { expectedRepo: true }
+      select: {
+        expectedRepo: true,
+        validationType: true
+      }
     }),
     prisma.userProfile.findUnique({
       where: { userId: user.id },
@@ -39,14 +52,30 @@ export async function completeTask(formData: FormData) {
   ])
 
   // If stage requires a repo, verify it
-  if (stage?.expectedRepo) {
+  if (stage?.validationType === "repo_exists") {
     if (!profile?.githubUsername) {
-      redirect(`/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent("Set your GitHub username in Settings before completing tasks.")}`)
+      redirect(
+        `/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent(
+          "Set your GitHub username in Settings before completing tasks."
+        )}`
+      )
     }
 
-    const repoExists = await checkGitHubRepo(profile.githubUsername, stage.expectedRepo)
+    if (!stage.expectedRepo) {
+      throw new Error("Stage requires repo validation but expectedRepo is missing")
+    }
+
+    const repoExists = await checkGitHubRepo(
+      profile.githubUsername,
+      stage.expectedRepo
+    )
+
     if (!repoExists) {
-      redirect(`/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent(`Repo not found: github.com/${profile.githubUsername}/${stage.expectedRepo} — make sure it's public and you've pushed your work.`)}`)
+      redirect(
+        `/paths/${pathId}/${stageId}/${taskId}?error=${encodeURIComponent(
+          `Repo not found: github.com/${profile.githubUsername}/${stage.expectedRepo} — make sure it's public and you've pushed your work.`
+        )}`
+      )
     }
   }
 
