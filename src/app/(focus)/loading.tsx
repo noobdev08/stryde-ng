@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-[#020617] text-white">
+    <main className="min-h-screen bg-[var(--background)] text-white">
       <div className="max-w-4xl mx-auto px-6 pt-12">
         
         {/* Skeleton Back Button */}

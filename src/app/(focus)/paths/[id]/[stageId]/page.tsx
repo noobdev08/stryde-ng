@@ -20,7 +20,7 @@ export default async function StagePage({
     if (!stage) notFound()
 
     return (
-        <main className="min-h-screen bg-[#020617] text-white pb-20">
+        <main className="min-h-screen bg-[var(--background)] text-white pb-20">
             <div className="max-w-4xl mx-auto px-6 pt-12">
 
                 {/* Back Button */}
