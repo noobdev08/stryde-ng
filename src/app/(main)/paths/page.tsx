@@ -3,6 +3,8 @@ import prisma from "../../../utils/lib/prismaClient"
 import PathCard from '@/components/PathCard'
 import { Monitor, Database, Terminal, Layers, Sparkles } from 'lucide-react'
 import { redirect } from "next/navigation"
+import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
+import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 
 // Helper to map icons to database names
 const getIcon = (name: string) => {
@@ -22,31 +24,12 @@ export default async function PathPage() {
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) redirect("/login")
 
-  // 2. Fetch all paths and include task counts to calculate progress
-  const dbPaths = await prisma.path.findMany({
-    orderBy: { order: 'asc' },
-    include: {
-      stages: {
-        include: {
-          tasks: {
-            include: {
-              userProgress: {
-                where: { userId: user.id }
-              }
-            }
-          }
-        }
-      }
-    }
-  })
+  // 2. Fetch all paths with progress
+  const dbPaths = await getAllPathsWithProgress(user.id)
 
   // 3. Process the data for the UI
   const processedPaths = dbPaths.map(path => {
-    const allTasks = path.stages.flatMap(s => s.tasks)
-    const completedTasks = allTasks.filter(t => t.userProgress.length > 0)
-    const progressPercent = allTasks.length > 0 
-      ? Math.round((completedTasks.length / allTasks.length) * 100) 
-      : 0
+    const { progressPercent } = calculatePathProgress(path.stages)
 
     return {
       id: path.id,

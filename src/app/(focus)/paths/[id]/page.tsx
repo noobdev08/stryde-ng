@@ -5,6 +5,7 @@ import { CheckCircle2, Lock, ArrowLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import StageList from "@/components/StageList"
 import { type Plan } from "@/utils/lib/plans"
+import { ProgressBar } from "@/components/ProgressBar"
 
 export default async function PathDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -53,12 +54,7 @@ export default async function PathDetailPage({ params }: { params: Promise<{ id:
               </span>
               <span className="text-sm font-bold text-blue-400">{path.progressPercent}%</span>
             </div>
-            <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-blue-500 transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(59,130,246,0.4)]"
-                style={{ width: `${path.progressPercent}%` }}
-              />
-            </div>
+            <ProgressBar percentage={path.progressPercent} />
           </div>
 
           <div className="bg-[#0f172a]/40 border border-slate-800/50 p-4 rounded-xl text-center">

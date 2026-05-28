@@ -4,7 +4,7 @@ import { redirect, notFound } from "next/navigation"
 import { ArrowLeft, ExternalLink, Video, BookOpen, Cat, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { completeTask } from "../../../../../actions/progress"
-import StageButton from "../../../../../../components/StageButton"
+import { ActionButton } from "@/components/ActionButton"
 
 export default async function TaskPage({
   params,
@@ -167,7 +167,7 @@ export default async function TaskPage({
             <input type="hidden" name="taskId" value={taskId} />
             <input type="hidden" name="stageId" value={stageId} />
             <input type="hidden" name="pathId" value={id} />
-            <StageButton label="Complete Task" completed={isCompleted} />
+            <ActionButton variant="submit" label="Complete Task" completed={isCompleted} loadingText="Completing..." showCheckIcon />
           </form>
         </div>
 

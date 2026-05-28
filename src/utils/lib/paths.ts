@@ -1,4 +1,5 @@
 import prisma from "./prismaClient"
+import { calculatePathProgress } from "./progressCalculator"
 
 export async function getPathWithProgress(pathId: string, userId: string) {
   const path = await prisma.path.findUnique({
@@ -22,15 +23,11 @@ export async function getPathWithProgress(pathId: string, userId: string) {
 
   if (!path) return null
 
-  // Calculate overall percentage
-  const allTasks = path.stages.flatMap(s => s.tasks)
-  const completedTasks = allTasks.filter(t => t.userProgress.length > 0)
-  const progressPercent = allTasks.length > 0 
-    ? Math.round((completedTasks.length / allTasks.length) * 100) 
-    : 0
-
+  const { progressPercent } = calculatePathProgress(path.stages)
   return { ...path, progressPercent }
 }
+
+import { calculateTaskProgress } from "./progressCalculator"
 
 export async function getStageWithProgress(stageId: string, userId: string) {
   const stage = await prisma.stage.findUnique({
@@ -49,14 +46,6 @@ export async function getStageWithProgress(stageId: string, userId: string) {
 
   if (!stage) return null
 
-  const completedCount = stage.tasks.filter(t => t.userProgress.length > 0).length
-  const progressPercent = stage.tasks.length > 0 
-    ? Math.round((completedCount / stage.tasks.length) * 100) 
-    : 0
-
-  return { 
-    ...stage, 
-    completedCount, 
-    progressPercent 
-  }
+  const { completedCount, progressPercent } = calculateTaskProgress(stage.tasks)
+  return { ...stage, completedCount, progressPercent }
 }

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import prisma from "@/utils/lib/prismaClient"
 import { Cat, LogOut } from "lucide-react"
 import { saveGithubUsername } from "@/app/actions/progress"
-import { SubmitButton } from "@/components/usernameButton"
+import { ActionButton } from "@/components/ActionButton"
 import { logout } from "@/app/(auth)/actions"
 
 export default async function SettingsPage({
@@ -54,7 +54,7 @@ export default async function SettingsPage({
               placeholder="your-github-username"
               className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-slate-500"
             />
-            <SubmitButton />
+            <ActionButton variant="submit" text="Save username" loadingText="Saving..." />
           </form>
         </div>
 

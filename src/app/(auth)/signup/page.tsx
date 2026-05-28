@@ -1,7 +1,7 @@
 "use client"
 
 import { signup } from '@/app/(auth)/actions'
-import SubmitButton from '@/components/SubmitButton'
+import { ActionButton } from '@/components/ActionButton'
 import { Rocket, User, Mail, Lock, Globe } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
@@ -102,7 +102,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <SubmitButton text="Sign Up" />
+              <ActionButton variant="submit" text="Sign Up" loadingText="Creating..." />
             </form>
 
             <p className="text-sm text-slate-500 mt-8 text-center">

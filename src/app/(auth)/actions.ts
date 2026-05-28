@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { mapSignupError, mapLoginError } from '@/utils/lib/authErrors'
 
 export async function signup(formData: FormData) {
   const supabase = await createClient()
@@ -19,22 +20,11 @@ export async function signup(formData: FormData) {
 
   if (error) {
     console.log(error.message)
-    // Map error to user-friendly message
-    let errorMessage = ''
-    if (error.message.includes('User already registered')) {
-      errorMessage = 'An account already exists with this email'
-    } else if (error.message.includes('Password should be at least 6 characters')) {
-      errorMessage = 'Password must be at least 6 characters'
-    } else if (error.message.includes('email')) {
-      errorMessage = 'Please enter a valid email address'
-    } else {
-      errorMessage = 'Something went wrong. Please try again.'
-    }
+    const errorMessage = mapSignupError(error.message)
     return redirect(`/signup?error=${encodeURIComponent(errorMessage)}`)
   }
 
   revalidatePath('/', 'layout')
-  // Optional: Show success message before redirect
   redirect('/dashboard?signup=success')
 }
 
@@ -50,14 +40,7 @@ export async function logIn(formData: FormData) {
 
   if (error) {
     console.log(error.message)
-    let errorMessage = ''
-    if (error.message.includes('Invalid login credentials')) {
-      errorMessage = 'Invalid email or password'
-    } else if (error.message.includes('Email not confirmed')) {
-      errorMessage = 'Please confirm your email address before logging in'
-    } else {
-      errorMessage = 'Something went wrong. Please try again.'
-    }
+    const errorMessage = mapLoginError(error.message)
     return redirect(`/login?error=${encodeURIComponent(errorMessage)}`)
   }
 

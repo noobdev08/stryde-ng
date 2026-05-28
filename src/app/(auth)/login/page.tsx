@@ -1,7 +1,7 @@
 "use client"
 
 import { logIn } from '@/app/(auth)/actions'
-import SubmitButton from '@/components/SubmitButton'
+import { ActionButton } from '@/components/ActionButton'
 import { Sparkles, Mail, Lock, Globe } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <SubmitButton />
+              <ActionButton variant="submit" text="Sign In" loadingText="Signing in..." />
             </form>
 
             <div className="my-6 flex items-center gap-4 text-slate-600">

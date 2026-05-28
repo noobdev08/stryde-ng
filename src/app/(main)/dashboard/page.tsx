@@ -3,7 +3,10 @@ import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
 import { FlameKindling, Sparkles, Monitor, Layout, Database, Rocket } from "lucide-react"
 import prisma from '@/utils/lib/prismaClient'
-import Link from 'next/link';
+import Link from 'next/link'
+import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
+import { calculatePathProgress } from '@/utils/lib/progressCalculator'
+import { ProgressBar } from '@/components/ProgressBar'
 
 export default async function DashboardPage() {
   const supabase = await createClient() //
@@ -43,34 +46,13 @@ export default async function DashboardPage() {
     }
   }
 
-  // 1. Fetch all Paths with nested Stages and Tasks, 
-  // including the user's progress for each task.
-  const paths = await prisma.path.findMany({
-    include: {
-      stages: {
-        include: {
-          tasks: {
-            include: {
-              userProgress: {
-                where: { userId: user.id }
-              }
-            }
-          }
-        }
-      }
-    },
-    orderBy: { order: 'asc' }
-  })
+  // 1. Fetch all Paths with nested Stages and Tasks
+  const paths = await getAllPathsWithProgress(user.id)
 
   // 2. Calculate Progress for each path
   const pathsWithProgress = paths.map(path => {
-    const allTasks = path.stages.flatMap(s => s.tasks)
-    const completedTasks = allTasks.filter(t => t.userProgress.length > 0)
-    const progressPercent = allTasks.length > 0
-      ? Math.round((completedTasks.length / allTasks.length) * 100)
-      : 0
-
-    return { ...path, progressPercent, totalTasks: allTasks.length, completedCount: completedTasks.length }
+    const { progressPercent, totalCount, completedCount } = calculatePathProgress(path.stages)
+    return { ...path, progressPercent, totalTasks: totalCount, completedCount }
   })
 
   // 3. Find the "Continue Learning" task
@@ -122,15 +104,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="w-full md:max-w-md z-10">
-            <div className="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2">
-              <span className="text-blue-400">{activePath?.progressPercent || 0}% Complete</span>
-            </div>
-            <div className="w-full bg-slate-800/50 h-2 rounded-full overflow-hidden">
-              <div
-                className="bg-blue-500 h-full transition-all duration-700"
-                style={{ width: `${activePath?.progressPercent || 0}%` }}
-              />
-            </div>
+            <ProgressBar percentage={activePath?.progressPercent || 0} label />
           </div>
 
           <Link

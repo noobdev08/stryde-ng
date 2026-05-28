@@ -1,7 +1,7 @@
 export async function checkRepoExists(
     username: string,
     repo: string
-): Promise<{ exists: boolean; error?: string }> {
+): Promise<boolean> {
     try {
         const res = await fetch(
             `https://api.github.com/repos/${username}/${repo}`,
@@ -9,15 +9,12 @@ export async function checkRepoExists(
                 headers: {
                     Accept: "application/vnd.github.v3+json",
                 },
-                next: { revalidate: 0 },
+                cache: "no-store",
             }
         )
 
-        if (res.status === 200) return { exists: true }
-        if (res.status === 404) return { exists: false, error: "Repo not found" }
-
-        return { exists: false, error: "GitHub API error" }
+        return res.status === 200
     } catch {
-        return { exists: false, error: "Network error" }
+        return false
     }
-};
+}

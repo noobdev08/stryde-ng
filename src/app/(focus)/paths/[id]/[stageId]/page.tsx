@@ -3,7 +3,8 @@ import { getStageWithProgress } from "../../../../../utils/lib/paths"
 import { redirect, notFound } from "next/navigation"
 import { ArrowLeft, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
-import { TaskStartButton } from "@/components/TaskStartBtn"
+import { ActionButton } from "@/components/ActionButton"
+import { ProgressBar } from "@/components/ProgressBar"
 
 export default async function StagePage({
     params
@@ -43,12 +44,7 @@ export default async function StagePage({
                             <span className="text-[10px] text-slate-500">{stage.progressPercent}%</span>
                         </div>
                     </div>
-                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)] transition-all duration-700"
-                            style={{ width: `${stage.progressPercent}%` }}
-                        />
-                    </div>
+                    <ProgressBar percentage={stage.progressPercent} />
                 </div>
 
                 {/* Tasks List */}
@@ -90,7 +86,7 @@ export default async function StagePage({
                                             Completed
                                         </span>
                                     ) : isCurrent ? (
-                                        <TaskStartButton href={`/paths/${id}/${stageId}/${task.id}`} />
+                                        <ActionButton variant="navigate" text="Start" href={`/paths/${id}/${stageId}/${task.id}`} size="sm" loadingText="Loading" />
                                     ) : (
                                         <span className="text-slate-600 text-xs font-black uppercase tracking-widest px-4 py-2 bg-slate-900 rounded-lg border border-transparent">
                                             Locked

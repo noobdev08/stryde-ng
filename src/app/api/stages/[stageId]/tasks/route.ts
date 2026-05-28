@@ -1,16 +1,11 @@
-import { createClient } from '@/utils/supabase/server';
+import { requireAuth } from '@/utils/middleware/apiAuth';
 import prisma from '@/utils/lib/prismaClient'
 
 export async function GET(request: Request, { params }: { params: Promise<{ stageId: string }> }) {
-    const supabase = await createClient();
+    const { user, response } = await requireAuth();
+    if (response) return response;
+
     const { stageId } = await params;
-    // now use stageId in your query
-
-    const { data: { user }, error } = await supabase.auth.getUser();
-
-    if (!user) {
-        return Response.json({ error: 'Unauthorized' }, { status: 401 })
-    }
 
     const task = await prisma.task.findMany({
         where: {
@@ -22,7 +17,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ stag
     });
 
     const completed = await prisma.userProgress.findMany({
-        where: { userId: user.id, task: { stageId } },
+        where: { userId: user!.id, task: { stageId } },
         select: { taskId: true }
     })
 

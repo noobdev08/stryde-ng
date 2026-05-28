@@ -4,28 +4,7 @@ import prisma from "@/utils/lib/prismaClient"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
-
-async function checkGitHubRepo(username: string, repo: string): Promise<boolean> {
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${username}/${repo}`,
-      {
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-        cache: "no-store",
-      }
-    )
-
-    if (res.status === 200) return true
-    if (res.status === 404) return false
-
-    // treat rate limit / API issues as "temporary failure"
-    return false
-  } catch {
-    return false
-  }
-}
+import { checkRepoExists } from "@/utils/lib/github"
 
 export async function completeTask(formData: FormData) {
   const supabase = await createClient()
@@ -65,7 +44,7 @@ export async function completeTask(formData: FormData) {
       throw new Error("Stage requires repo validation but expectedRepo is missing")
     }
 
-    const repoExists = await checkGitHubRepo(
+    const repoExists = await checkRepoExists(
       profile.githubUsername,
       stage.expectedRepo
     )

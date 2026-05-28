@@ -1,19 +1,15 @@
-import { createClient } from "@/utils/supabase/server";
+import { requireAuth } from "@/utils/middleware/apiAuth";
 import prisma from "@/utils/lib/prismaClient";
 
 export async function POST(request: Request, { params }: { params: Promise<{ taskId: string }> }) {
-    const supabase = await createClient();
+    const { user, response } = await requireAuth();
+    if (response) return response;
+
     const { taskId } = await params;
-
-    const { data: { user }, error } = await supabase.auth.getUser();
-
-    if (!user) {
-        return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
     const task = await prisma.userProgress.create({
         data: {
-            userId: user.id,
+            userId: user!.id,
             taskId: taskId
         }
     });
