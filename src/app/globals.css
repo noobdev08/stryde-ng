@@ -1,9 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Using your deep navy brand colors instead of pure black */
+  /* Base Colors */
   --background: #0b1120;
+  --surface-primary: #0f172a;
+  --surface-secondary: #1e293b;
   --foreground: #ededed;
+
+  /* Semantic Colors */
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #1d4ed8;
+
+  --success: #10b981;
+  --success-light: #34d399;
+
+  --warning: #f59e0b;
+  --warning-light: #fbbf24;
+
+  --danger: #ef4444;
+  --danger-light: #f87171;
+
+  --neutral: #64748b;
+  --neutral-light: #94a3b8;
+
+  /* Animation */
+  --animate-wave: wave 2.5s infinite;
 }
 
 @theme inline {
@@ -11,18 +33,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --animate-wave: wave 2.5s infinite;
+  --animate-wave: var(--animate-wave);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  /* Use Geist for that modern developer feel */
   font-family: var(--font-sans), ui-sans-serif, system-ui;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Utility for the Hand Pivot */
 @utility animate-wave {
   animation: var(--animate-wave);
   transform-origin: 70% 70%;

@@ -1,12 +1,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
-import { FlameKindling, Sparkles, Monitor, Layout, Database, Rocket } from "lucide-react"
+import { Sparkles, Monitor, Layout, Database, Rocket } from "lucide-react"
 import prisma from '@/utils/lib/prismaClient'
 import Link from 'next/link'
 import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 import { ProgressBar } from '@/components/ProgressBar'
+import { calculateStreak, getStreakEmoji } from '@/utils/lib/streak'
 
 export default async function DashboardPage() {
   const supabase = await createClient() //
@@ -14,37 +15,8 @@ export default async function DashboardPage() {
 
   if (!user) redirect('/login') //
 
-  // 0. Calculate streak from UserProgress
-  const allProgress = await prisma.userProgress.findMany({
-    where: { userId: user.id },
-    select: { completedAt: true },
-    orderBy: { completedAt: 'desc' }
-  })
-
-  // Get unique days the user completed something (as YYYY-MM-DD strings)
-  const uniqueDays = [...new Set(
-    allProgress.map(p => p.completedAt.toISOString().split('T')[0])
-  )]
-
-  // Walk backwards from today, count consecutive days
-  const today = new Date().toISOString().split('T')[0]
-  let streak = 0
-  const current = new Date()
-
-  while (true) {
-    const dateStr = current.toISOString().split('T')[0]
-    if (uniqueDays.includes(dateStr)) {
-      streak++
-      current.setDate(current.getDate() - 1)
-    } else {
-      // Allow today to be missing (they haven't coded yet today)
-      if (dateStr === today && streak === 0) {
-        current.setDate(current.getDate() - 1)
-        continue
-      }
-      break
-    }
-  }
+  // Calculate streak
+  const streak = await calculateStreak(user.id)
 
   // 1. Fetch all Paths with nested Stages and Tasks
   const paths = await getAllPathsWithProgress(user.id)
@@ -74,12 +46,12 @@ export default async function DashboardPage() {
           <p className="text-sm text-gray-400">Let&apos;s continue your journey</p>
         </div>
 
-        {/* Streak - Currently hardcoded in your UI, but can be derived from UserProgress dates later */}
-        <div className="self-start md:self-auto bg-[#0f172a] border border-gray-800 px-4 py-2 rounded-xl flex items-center gap-3">
-          <FlameKindling size={18} className="text-orange-500 fill-orange-500/20" />
-          <div className="flex flex-row md:flex-col items-center gap-2 md:gap-0 leading-none">
-            <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Streak</span>
-            <span className="text-lg font-bold text-white">{streak}</span>
+        {/* Streak Badge */}
+        <div className="self-start md:self-auto bg-[hsl(240,23%,15%)] border border-slate-700/50 px-5 py-3 rounded-xl flex items-center gap-3 hover:border-orange-500/30 transition-all">
+          <div className="text-2xl">{getStreakEmoji(streak)}</div>
+          <div>
+            <p className="text-[10px] text-slate-400 uppercase font-black tracking-wider">Current Streak</p>
+            <p className="text-xl font-black text-orange-500">{streak} {streak === 1 ? 'day' : 'days'}</p>
           </div>
         </div>
       </div>
