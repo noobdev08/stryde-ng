@@ -57,7 +57,7 @@ export default async function TaskPage({
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-white">
-      <div className="max-w-3xl mx-auto px-8 pt-12 pb-20">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-12 sm:pt-14 md:pt-16 pb-20">
 
         {/* Back */}
         <div className="mb-12">

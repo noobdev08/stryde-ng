@@ -36,15 +36,15 @@ export default async function DashboardPage() {
     .find(t => t.userProgress.length === 0)
 
   return (
-    <main className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
+    <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6 md:mb-8">
         <div className='flex flex-col gap-1'>
-          <h1 className="text-lg md:text-2xl font-black flex items-center gap-2 text-white">
+          <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black flex items-center gap-2 text-white">
             Welcome, {user.user_metadata?.name || "Developer"}
             <Sparkles size={20} className="text-blue-400 animate-pulse shrink-0 hidden md:block" />
           </h1>
-          <p className="text-xs md:text-sm text-slate-400">Keep learning and building</p>
+          <p className="text-xs sm:text-xs md:text-sm text-slate-400">Keep learning and building</p>
         </div>
 
         {/* Streak Badge - Mobile & Desktop */}

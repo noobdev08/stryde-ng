@@ -27,13 +27,14 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-[#0b1120] border-b border-slate-800 fixed top-0 w-full z-50">
-        <Logo size={36} showText={false} />
+      <div className="lg:hidden flex items-center justify-between px-4 sm:px-6 py-3 bg-[#0b1120] border-b border-slate-800 fixed top-0 w-full z-50">
+        <Logo size={32} showText={false} />
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-slate-400 p-2"
+          className="text-slate-400 hover:text-white p-2 h-10 w-10 flex items-center justify-center rounded-lg transition-all"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -41,7 +42,7 @@ export default function Sidebar() {
       <aside
         className={`
           fixed z-40 h-screen w-64 bg-[#0b1120] border-r border-slate-800/50
-          flex flex-col px-6 pt-20 lg:pt-6
+          flex flex-col px-4 sm:px-6 pt-16 sm:pt-20 lg:pt-6
           transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
@@ -53,7 +54,7 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-col gap-2 flex-1">
+        <nav className="flex flex-col gap-1 flex-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href
 
@@ -63,7 +64,7 @@ export default function Sidebar() {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-xl transition-all group
+                  flex items-center gap-3 px-4 py-3 sm:py-3 rounded-lg transition-all group
                   ${isActive
                     ? "bg-slate-800 text-white"
                     : "text-slate-400 hover:text-white hover:bg-slate-800/60 hover:translate-x-1"
@@ -78,7 +79,7 @@ export default function Sidebar() {
                       : "group-hover:text-blue-400"
                   }
                 />
-                <span className="font-medium">{link.name}</span>
+                <span className="font-medium text-sm sm:text-base">{link.name}</span>
               </Link>
             )
           })}
@@ -87,10 +88,10 @@ export default function Sidebar() {
         {/* Logout */}
         <button
           onClick={logout}
-          className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-xl transition-all mt-auto"
+          className="flex items-center gap-3 text-slate-400 hover:text-red-400 px-4 py-3 rounded-lg transition-all mt-auto"
         >
           <LogOut size={20} />
-          <span className="font-medium cursor-pointer">Log out</span>
+          <span className="font-medium text-sm sm:text-base cursor-pointer">Log out</span>
         </button>
       </aside>
 

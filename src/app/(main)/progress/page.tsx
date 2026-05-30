@@ -8,11 +8,11 @@ export default function ProgressPage() {
   ]
 
   return (
-    <main className="flex-1 p-6 md:p-12 overflow-y-auto no-scrollbar">
+    <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto no-scrollbar">
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-black text-white tracking-tight mb-2">Your Growth</h1>
-        <p className="text-slate-400 text-sm">Every hour is an investment toward your mastery.</p>
+      <div className="mb-8 sm:mb-10">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-1 sm:mb-2">Your Growth</h1>
+        <p className="text-xs sm:text-sm text-slate-400">Every hour is an investment toward your mastery.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

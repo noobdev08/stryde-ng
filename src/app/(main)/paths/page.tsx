@@ -53,14 +53,14 @@ export default async function PathPage() {
   })
 
   return (
-    <main className="flex-1 p-6 md:p-12 overflow-y-auto no-scrollbar max-w-7xl mx-auto">
+    <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12 overflow-y-auto no-scrollbar max-w-7xl mx-auto">
       {/* Page Header */}
-      <div className="mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest mb-4">
+      <div className="mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">
           Available Tracks
         </div>
-        <h1 className="text-4xl font-black text-white tracking-tight mb-2">Learning Paths</h1>
-        <p className="text-slate-400">Choose your specialization and start executing.</p>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-1 sm:mb-2">Learning Paths</h1>
+        <p className="text-xs sm:text-sm text-slate-400">Choose your specialization and start executing.</p>
       </div>
 
       {/* Grid */}

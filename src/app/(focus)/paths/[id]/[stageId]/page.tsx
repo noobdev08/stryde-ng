@@ -22,26 +22,26 @@ export default async function StagePage({
 
     return (
         <main className="min-h-screen bg-[var(--background)] text-white pb-20">
-            <div className="max-w-4xl mx-auto px-6 pt-12">
+            <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-12 sm:pt-14 md:pt-16">
 
                 {/* Back Button */}
-                <Link href={`/paths/${id}`} className="inline-block mb-8 text-slate-500 hover:text-white transition-colors">
-                    <ArrowLeft size={24} />
+                <Link href={`/paths/${id}`} className="inline-block mb-6 sm:mb-8 text-slate-500 hover:text-white transition-colors">
+                    <ArrowLeft size={20} className="sm:size-24" />
                 </Link>
 
                 {/* Header */}
-                <div className="mb-10">
-                    <h1 className="text-4xl font-black mb-3">{stage.name}</h1>
-                    <p className="text-slate-400 text-lg">Learn the structure of the web with HTML.</p>
+                <div className="mb-8 sm:mb-10">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 sm:mb-3">{stage.name}</h1>
+                    <p className="text-xs sm:text-sm md:text-lg text-slate-400">Learn the structure of the web with HTML.</p>
                 </div>
 
                 {/* Mini Progress Bar */}
-                <div className="mb-12">
+                <div className="mb-10 sm:mb-12">
                     <div className="flex justify-between items-end mb-2">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Progress</span>
+                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500">Progress</span>
                         <div className="text-right">
                             <span className="block text-xs font-bold text-slate-300">{stage.completedCount} / {stage.tasks.length} tasks</span>
-                            <span className="text-[10px] text-slate-500">{stage.progressPercent}%</span>
+                            <span className="text-[9px] sm:text-[10px] text-slate-500">{stage.progressPercent}%</span>
                         </div>
                     </div>
                     <ProgressBar percentage={stage.progressPercent} />

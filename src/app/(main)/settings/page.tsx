@@ -23,10 +23,10 @@ export default async function SettingsPage({
   const saved = resolvedParams?.saved === "true"
 
   return (
-    <main className="flex-1 p-8 md:p-12">
+    <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
       <div className="max-w-xl">
-        <h1 className="text-2xl font-black text-white mb-2">Settings</h1>
-        <p className="text-slate-400 text-sm mb-10">Manage your account details</p>
+        <h1 className="text-xl sm:text-2xl font-black text-white mb-1 sm:mb-2">Settings</h1>
+        <p className="text-xs sm:text-sm text-slate-400 mb-8 sm:mb-10">Manage your account details</p>
 
         {/* GitHub Username */}
         <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6 mb-6">

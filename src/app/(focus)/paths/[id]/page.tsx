@@ -24,29 +24,29 @@ export default async function PathDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-slate-200 pb-20">
-      <div className="max-w-4xl mx-auto px-6 pt-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-12 sm:pt-14 md:pt-16">
 
         {/* Simplified Navigation */}
         <Link
           href="/paths"
-          className="flex items-center gap-2 text-slate-500 hover:text-white mb-10 transition-colors group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-white mb-8 sm:mb-10 transition-colors group w-fit"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span className="text-xs font-bold uppercase tracking-wider">All Tracks</span>
         </Link>
 
         {/* Hero Header - Refined Typography */}
-        <header className="mb-12 border-b border-slate-900 pb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+        <header className="mb-10 sm:mb-12 border-b border-slate-900 pb-8 sm:pb-12">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 tracking-tight">
             {path.name}
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
+          <p className="text-slate-400 text-xs sm:text-sm md:text-lg max-w-2xl leading-relaxed">
             {path.description}
           </p>
         </header>
 
         {/* Progress Section - Sleeker and less "bulky" */}
-        <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <section className="mb-12 sm:mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-center">
           <div className="md:col-span-2">
             <div className="flex justify-between items-end mb-3">
               <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
