@@ -8,6 +8,7 @@ import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 import { ProgressBar } from '@/components/ProgressBar'
 import { calculateStreak, getStreakEmoji } from '@/utils/lib/streak'
+import { OnboardingBanner } from '@/components/OnboardingBanner'
 
 export default async function DashboardPage() {
   const supabase = await createClient() //
@@ -35,70 +36,74 @@ export default async function DashboardPage() {
     .find(t => t.userProgress.length === 0)
 
   return (
-    <main className="flex-1 p-8 md:p-12 overflow-y-none">
+    <main className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6 md:mb-8">
         <div className='flex flex-col gap-1'>
-          <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-            Welcome back, {user.user_metadata?.name || "Developer"}
-            <Sparkles size={20} className="text-blue-400 animate-pulse shrink-0" />
+          <h1 className="text-lg md:text-2xl font-black flex items-center gap-2 text-white">
+            Welcome, {user.user_metadata?.name || "Developer"}
+            <Sparkles size={20} className="text-blue-400 animate-pulse shrink-0 hidden md:block" />
           </h1>
-          <p className="text-sm text-gray-400">Let&apos;s continue your journey</p>
+          <p className="text-xs md:text-sm text-slate-400">Keep learning and building</p>
         </div>
 
-        {/* Streak Badge */}
-        <div className="self-start md:self-auto bg-[hsl(240,23%,15%)] border border-slate-700/50 px-5 py-3 rounded-xl flex items-center gap-3 hover:border-orange-500/30 transition-all">
-          <div className="text-2xl">{getStreakEmoji(streak)}</div>
+        {/* Streak Badge - Mobile & Desktop */}
+        <div className="bg-slate-900/40 border border-slate-700/40 px-4 md:px-5 py-3 rounded-lg md:rounded-xl flex items-center gap-3 hover:border-orange-500/30 transition-all w-fit">
+          <div className="text-2xl md:text-3xl">{getStreakEmoji(streak)}</div>
           <div>
-            <p className="text-[10px] text-slate-400 uppercase font-black tracking-wider">Current Streak</p>
-            <p className="text-xl font-black text-orange-500">{streak} {streak === 1 ? 'day' : 'days'}</p>
+            <p className="text-[10px] md:text-xs text-slate-500 uppercase font-black tracking-wider">Streak</p>
+            <p className="text-lg md:text-xl font-black text-orange-500">{streak} {streak === 1 ? 'day' : 'days'}</p>
           </div>
         </div>
       </div>
 
+      {/* Onboarding Banner for new users */}
+      <OnboardingBanner userName={user.user_metadata?.name || "Developer"} completedCount={pathsWithProgress.reduce((acc, curr) => acc + curr.completedCount, 0)} />
+
       {/* Continue Learning - Hero Card */}
-      <section className='mt-5'>
-        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Continue Learning</h2>
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#1e293b] border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6 shadow-2xl">
-          <div className="flex items-center gap-4 md:gap-8 w-full">
-            <div className="w-14 h-14 md:w-20 md:h-20 bg-blue-600/10 border border-blue-500/20 rounded-2xl flex items-center justify-center shrink-0">
-              <Monitor size={28} className="text-blue-400" />
+      {nextTask && (
+        <section className='mb-6 md:mb-8'>
+          <h2 className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-widest mb-3 md:mb-4">Continue Learning</h2>
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900/60 to-slate-800/40 border border-slate-700/40 rounded-lg md:rounded-2xl p-4 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 shadow-lg hover:border-blue-500/20 transition-all">
+            <div className="flex items-center gap-3 md:gap-8 w-full">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-600/10 border border-blue-500/20 rounded-lg md:rounded-xl flex items-center justify-center shrink-0">
+                <Monitor size={24} className="text-blue-400" />
+              </div>
+
+              <div className="flex-1 z-10 min-w-0">
+                <h3 className="text-base md:text-xl font-black text-white tracking-tight line-clamp-2">
+                  {nextTask?.title || "All Caught Up!"}
+                </h3>
+                <p className="text-xs md:text-sm text-slate-400 font-medium line-clamp-1">
+                  {nextTask ? `${nextTask.stageName}` : "Check back later for new tasks"}
+                </p>
+              </div>
             </div>
 
-            <div className="flex-1 z-10">
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">
-                {nextTask?.title || "All Caught Up!"}
-              </h3>
-              <p className="text-xs md:text-sm text-slate-400 font-medium">
-                {nextTask ? `${nextTask.stageName}` : "Check back later for new tasks"}
-              </p>
+            <div className="w-full md:max-w-sm z-10">
+              <ProgressBar percentage={activePath?.progressPercent || 0} label size="md" />
             </div>
-          </div>
 
-          <div className="w-full md:max-w-md z-10">
-            <ProgressBar percentage={activePath?.progressPercent || 0} label />
-          </div>
-
-          <Link
-            href={nextTask ? `/paths/${activePath.id}/${nextTask.stageId}/${nextTask.id}` : '#'}
-            className="w-full md:w-auto z-10"
-          >
-            <button
-              className={`w-full bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-2xl font-bold transition-all cursor-pointer ${!nextTask && 'opacity-50 cursor-not-allowed'}`}
-              disabled={!nextTask}
+            <Link
+              href={nextTask ? `/paths/${activePath?.id}/${nextTask.stageId}/${nextTask.id}` : '#'}
+              className="w-full md:w-auto z-10"
             >
-              {nextTask ? 'Continue' : 'All Caught Up!'}
-            </button>
-          </Link>
-        </div>
-      </section>
+              <button
+                className={`w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-6 md:px-10 py-3 md:py-4 rounded-lg font-bold transition-all cursor-pointer ${!nextTask && 'opacity-50 cursor-not-allowed'}`}
+                disabled={!nextTask}
+              >
+                {nextTask ? 'Continue →' : 'All Set! 🎉'}
+              </button>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Your Paths - Dynamic Grid */}
-      <section className='mt-5'>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Your Paths</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className='mb-6 md:mb-8'>
+        <h2 className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-widest mb-3 md:mb-4">Your Learning Paths</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {pathsWithProgress.map((path) => (
-
             <PathCard
               key={path.id}
               id={path.id}
@@ -111,6 +116,8 @@ export default async function DashboardPage() {
               }
               progress={path.progressPercent}
               isLocked={path.isLocked}
+              completedCount={path.completedCount}
+              totalCount={path.totalTasks}
               className={path.progressPercent > 0 ? "border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.1)]" : ""}
             />
           ))}
@@ -118,21 +125,32 @@ export default async function DashboardPage() {
       </section>
 
       {/* Stats Section */}
-      <section className='mt-5'>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Your Stats</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-[#0f172a] border border-gray-800 p-5 rounded-2xl">
-            <p className="text-xs text-gray-500 font-medium mb-1">Tasks Completed</p>
-            <p className="text-2xl font-bold text-white">
+      <section className='mb-6 md:mb-8'>
+        <h2 className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-widest mb-3 md:mb-4">Your Stats</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="bg-slate-900/40 border border-slate-700/40 p-4 md:p-5 rounded-lg hover:border-blue-500/20 transition-all">
+            <p className="text-xs md:text-sm text-slate-500 font-medium mb-2">Tasks Completed</p>
+            <p className="text-2xl md:text-3xl font-black text-blue-400">
               {pathsWithProgress.reduce((acc, curr) => acc + curr.completedCount, 0)}
             </p>
           </div>
-          {/* Add other stats like Streak and Time here */}
-          <div className="bg-[#0f172a] border border-gray-800 p-5 rounded-2xl">
-            <p className="text-xs text-gray-500 font-medium mb-1">Current Streak</p>
-            <p className="text-2xl font-bold text-white flex items-center gap-2">
+          <div className="bg-slate-900/40 border border-slate-700/40 p-4 md:p-5 rounded-lg hover:border-orange-500/20 transition-all">
+            <p className="text-xs md:text-sm text-slate-500 font-medium mb-2">Current Streak</p>
+            <p className="text-2xl md:text-3xl font-black text-orange-400 flex items-center gap-2">
               {streak}
-              <span className="text-orange-500 text-lg">🔥</span>
+              <span className="text-lg md:text-xl">{getStreakEmoji(streak)}</span>
+            </p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-700/40 p-4 md:p-5 rounded-lg hover:border-emerald-500/20 transition-all">
+            <p className="text-xs md:text-sm text-slate-500 font-medium mb-2">Paths Started</p>
+            <p className="text-2xl md:text-3xl font-black text-emerald-400">
+              {pathsWithProgress.filter(p => p.progressPercent > 0).length}
+            </p>
+          </div>
+          <div className="bg-slate-900/40 border border-slate-700/40 p-4 md:p-5 rounded-lg hover:border-purple-500/20 transition-all">
+            <p className="text-xs md:text-sm text-slate-500 font-medium mb-2">Paths Completed</p>
+            <p className="text-2xl md:text-3xl font-black text-purple-400">
+              {pathsWithProgress.filter(p => p.progressPercent === 100).length}
             </p>
           </div>
         </div>

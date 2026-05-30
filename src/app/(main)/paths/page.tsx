@@ -19,7 +19,7 @@ const getIcon = (name: string) => {
 
 export default async function PathPage() {
   const supabase = await createClient()
-  
+
   // 1. Get the real user session
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) redirect("/login")
@@ -29,7 +29,15 @@ export default async function PathPage() {
 
   // 3. Process the data for the UI
   const processedPaths = dbPaths.map(path => {
-    const { progressPercent } = calculatePathProgress(path.stages)
+    const { progressPercent, totalCount, completedCount } = calculatePathProgress(path.stages)
+
+    // Determine difficulty based on path name
+    const difficultyMap: Record<string, "beginner" | "intermediate" | "advanced"> = {
+      "Frontend": "beginner",
+      "Backend": "intermediate",
+      "Fullstack": "advanced",
+      "Data Structures": "intermediate"
+    }
 
     return {
       id: path.id,
@@ -37,7 +45,10 @@ export default async function PathPage() {
       description: path.description || "Master this specialization.",
       icon: getIcon(path.name),
       progress: progressPercent,
-      isLocked: path.isLocked
+      isLocked: path.isLocked,
+      difficulty: difficultyMap[path.name] || "beginner",
+      completedCount,
+      totalCount
     }
   })
 
@@ -55,14 +66,17 @@ export default async function PathPage() {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {processedPaths.map((path) => (
-          <PathCard 
+          <PathCard
             key={path.id}
-            id={path.id} // Ensure your PathCard component accepts 'id' for linking
+            id={path.id}
             title={path.title}
             description={path.description}
             icon={path.icon}
             progress={path.progress}
             isLocked={path.isLocked}
+            difficulty={path.difficulty}
+            completedCount={path.completedCount}
+            totalCount={path.totalCount}
           />
         ))}
       </div>

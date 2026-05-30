@@ -1,59 +1,128 @@
 import React from 'react'
-import { Lock, ChevronRight } from "lucide-react"
+import { Lock, ChevronRight, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { StatusBadge } from "./StatusBadge"
 
 interface PathCardProps {
   id: string
   title: string
   description: string
-  icon?: React.ReactNode 
+  icon?: React.ReactNode
   progress: number
   isLocked?: boolean
+  isNew?: boolean
+  difficulty?: "beginner" | "intermediate" | "advanced"
+  completedCount?: number
+  totalCount?: number
   className?: string
 }
 
-export default function PathCard({ id, title, description, icon, progress, isLocked, className = ""}: PathCardProps) {
-  // 1. Locked State (No Link)
+export default function PathCard({
+  id,
+  title,
+  description,
+  icon,
+  progress,
+  isLocked,
+  isNew,
+  difficulty,
+  completedCount = 0,
+  totalCount = 0,
+  className = ""
+}: PathCardProps) {
+  // Locked state
   if (isLocked) {
     return (
-      <div className={`bg-[#0f172a]/50 border-2 border-slate-800/60 rounded-3xl p-8 flex flex-col items-center justify-center min-h-[240px] border-dashed opacity-60 transition-all ${className}`}>
-        <div className="p-4 bg-slate-800/50 rounded-2xl mb-4">
-          <Lock className="text-slate-600" size={32} />
+      <div className={`
+        bg-slate-900/30 border-2 border-dashed border-slate-700/40
+        rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center
+        min-h-[180px] md:min-h-[240px] opacity-60 transition-all hover:opacity-70
+        ${className}
+      `}>
+        <div className="p-3 md:p-4 bg-slate-800/50 rounded-xl mb-3 md:mb-4">
+          <Lock className="text-slate-600" size={28} />
         </div>
-        <h3 className="font-bold text-slate-500 text-lg">{title}</h3>
-        <p className="text-[10px] uppercase tracking-[0.2em] font-black text-slate-600 mt-2">Access Denied</p>
+        <h3 className="font-bold text-slate-500 text-base md:text-lg text-center">{title}</h3>
+        <p className="text-[10px] md:text-xs uppercase tracking-wider font-semibold text-slate-600 mt-2">
+          🔒 Unlock Later
+        </p>
       </div>
     )
   }
 
-  // 2. Active State (Wrapped in Link)
+  // Active state
   return (
-    <Link href={`/paths/${id}`} className="block">
-      <div className={`bg-[#0f172a] border border-slate-800 hover:border-blue-500/40 transition-all duration-500 rounded-[2rem] p-8 group cursor-pointer shadow-lg hover:shadow-blue-500/5 relative overflow-hidden ${className}`}>
-        
-        {/* Subtle Background Accent */}
-        <div className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/5 blur-3xl group-hover:bg-blue-500/10 transition-all" />
+    <Link href={`/paths/${id}`} className="block group">
+      <div className={`
+        bg-slate-900/40 border border-slate-700/40 hover:border-blue-500/40
+        transition-all duration-300 rounded-xl md:rounded-2xl p-4 md:p-6
+        hover:shadow-lg hover:shadow-blue-500/5 relative overflow-hidden
+        cursor-pointer min-h-[200px] md:min-h-[260px] flex flex-col justify-between
+        ${className}
+      `}>
+        {/* Background accent */}
+        <div className="absolute -right-4 -top-4 w-20 h-20 md:w-24 md:h-24 bg-blue-500/5 blur-3xl
+          group-hover:bg-blue-500/10 transition-all duration-300 pointer-events-none" />
 
-        <div className="flex justify-between items-start mb-6">
-          <div className="p-3 bg-blue-600/10 w-fit rounded-2xl border border-blue-500/20 group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-            {icon} 
-          </div>
-          <ChevronRight size={20} className="text-slate-700 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+        {/* Status Badges - Top Right */}
+        <div className="absolute top-3 md:top-4 right-3 md:right-4 flex gap-2 flex-wrap justify-end z-10">
+          {isNew && <StatusBadge status="new" size="sm" />}
+          {progress === 100 && (
+            <div className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500/20
+              text-emerald-300 text-xs font-bold rounded-full whitespace-nowrap">
+              <CheckCircle size={12} /> Done
+            </div>
+          )}
         </div>
-        
-        <h3 className="font-black text-xl mb-2 text-white tracking-tight">{title}</h3>
-        <p className="text-sm text-slate-400 mb-8 leading-relaxed line-clamp-2">
-          {description}
-        </p>
 
-        <div className="space-y-3">
-          <div className="flex justify-between items-end">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Progress</span>
-            <span className="text-xs font-bold text-blue-400">{progress}%</span>
+        {/* Header with Icon */}
+        <div className="flex justify-between items-start mb-3 md:mb-4">
+          <div className="p-2 md:p-3 bg-blue-600/10 w-fit rounded-lg md:rounded-xl
+            border border-blue-500/20 group-hover:scale-110
+            group-hover:border-blue-500/40 transition-all duration-300
+            text-blue-400 shadow-sm">
+            <div className="text-base md:text-2xl">{icon}</div>
           </div>
-          <div className="h-2 w-full bg-slate-800/50 rounded-full overflow-hidden p-[2px]">
-            <div 
-              className="bg-blue-500 h-full rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+          <ChevronRight size={18} className="text-slate-600
+            group-hover:text-blue-400 group-hover:translate-x-1 transition-all hidden md:block" />
+        </div>
+
+        {/* Title & Description */}
+        <div className="flex-1">
+          <h3 className="font-black text-base md:text-xl mb-1 md:mb-2 text-white tracking-tight line-clamp-2">
+            {title}
+          </h3>
+          <p className="text-xs md:text-sm text-slate-400 mb-3 md:mb-4 leading-relaxed line-clamp-2">
+            {description}
+          </p>
+        </div>
+
+        {/* Difficulty Badge */}
+        {difficulty && (
+          <div className="mb-3 md:mb-4">
+            <StatusBadge status={difficulty} size="sm" />
+          </div>
+        )}
+
+        {/* Progress Stats */}
+        <div className="space-y-2 md:space-y-3">
+          <div className="flex justify-between items-center gap-2">
+            <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Progress
+            </span>
+            <span className="text-xs md:text-sm font-bold text-blue-400 flex-shrink-0">
+              {progress}%
+            </span>
+          </div>
+          {totalCount > 0 && (
+            <div className="text-[10px] md:text-xs text-slate-500">
+              {completedCount} / {totalCount} tasks
+            </div>
+          )}
+          <div className="h-1.5 md:h-2 w-full bg-slate-800/50 rounded-full overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-blue-500 to-blue-400 h-full
+                transition-all duration-1000 shadow-sm"
               style={{ width: `${progress}%` }}
             />
           </div>
