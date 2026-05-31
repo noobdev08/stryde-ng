@@ -1,4 +1,5 @@
 "use client"
+import { Sparkles, Clock, CheckCircle, Lock, GraduationCap, TrendingUp, Zap } from "lucide-react"
 
 type StatusType = "new" | "in-progress" | "completed" | "locked" | "beginner" | "intermediate" | "advanced"
 
@@ -8,13 +9,13 @@ interface StatusBadgeProps {
 }
 
 const statusStyles = {
-  new: { bg: "bg-blue-500/20", text: "text-blue-300", emoji: "✨" },
-  "in-progress": { bg: "bg-amber-500/20", text: "text-amber-300", emoji: "⏳" },
-  completed: { bg: "bg-emerald-500/20", text: "text-emerald-300", emoji: "✅" },
-  locked: { bg: "bg-red-500/20", text: "text-red-300", emoji: "🔒" },
-  beginner: { bg: "bg-emerald-500/20", text: "text-emerald-300", emoji: "👶" },
-  intermediate: { bg: "bg-amber-500/20", text: "text-amber-300", emoji: "🏃" },
-  advanced: { bg: "bg-red-500/20", text: "text-red-300", emoji: "🚀" }
+  new: { bg: "bg-blue-500/20", text: "text-blue-300", icon: <Sparkles size={14} /> },
+  "in-progress": { bg: "bg-amber-500/20", text: "text-amber-300", icon: <Clock size={14} /> },
+  completed: { bg: "bg-emerald-500/20", text: "text-emerald-300", icon: <CheckCircle size={14} /> },
+  locked: { bg: "bg-red-500/20", text: "text-red-300", icon: <Lock size={14} /> },
+  beginner: { bg: "bg-emerald-500/20", text: "text-emerald-300", icon: <GraduationCap size={14} /> },
+  intermediate: { bg: "bg-amber-500/20", text: "text-amber-300", icon: <TrendingUp size={14} /> },
+  advanced: { bg: "bg-red-500/20", text: "text-red-300", icon: <Zap size={14} /> }
 }
 
 const sizeClasses = {
@@ -41,7 +42,7 @@ export function StatusBadge({ status, size = "sm" }: StatusBadgeProps) {
       inline-flex items-center gap-1 font-bold rounded-full whitespace-nowrap
       ${style.bg} ${style.text} ${sizeClasses[size]}
     `}>
-      <span>{style.emoji}</span>
+      {style.icon}
       <span>{labels[status]}</span>
     </span>
   )

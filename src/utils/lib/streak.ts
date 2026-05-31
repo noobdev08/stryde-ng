@@ -1,4 +1,5 @@
 import prisma from "./prismaClient"
+import { Flame } from "lucide-react"
 
 export async function calculateStreak(userId: string): Promise<number> {
   const allProgress = await prisma.userProgress.findMany({
@@ -58,10 +59,10 @@ export async function calculateStreak(userId: string): Promise<number> {
   return streak
 }
 
-export function getStreakEmoji(streak: number): string {
-  if (streak === 0) return '🔥'
-  if (streak < 3) return '🔥'
-  if (streak < 7) return '🔥🔥'
-  if (streak < 14) return '🔥🔥🔥'
-  return '🔥🔥🔥🔥'
+export function getStreakIconCount(streak: number): number {
+  if (streak === 0) return 1
+  if (streak < 3) return 1
+  if (streak < 7) return 2
+  if (streak < 14) return 3
+  return 4
 }
