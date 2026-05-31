@@ -7,7 +7,7 @@ import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 import { ProgressBar } from '@/components/ProgressBar'
 import { calculateStreak, getStreakIconCount } from '@/utils/lib/streak'
-import { OnboardingBanner } from '@/components/OnboardingBanner'
+import { InteractiveOnboarding } from '@/components/InteractiveOnboarding'
 import { Card } from '@/components/Card'
 import { StatCard } from '@/components/StatCard'
 import { SectionHeader } from '@/components/SectionHeader'
@@ -62,8 +62,11 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Onboarding Banner for new users */}
-        <OnboardingBanner userName={user.user_metadata?.name || "Developer"} completedCount={totalCompleted} />
+        {/* Interactive Onboarding for new users */}
+        <InteractiveOnboarding 
+          userName={user.user_metadata?.name || "Developer"} 
+          completedCount={totalCompleted} 
+        />
 
         {/* Continue Learning - Hero Card */}
         {nextTask && (
