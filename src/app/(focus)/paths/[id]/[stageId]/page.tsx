@@ -7,6 +7,7 @@ import { ActionButton } from "@/components/ActionButton"
 import { ProgressBar } from "@/components/ProgressBar"
 import { Card } from "@/components/Card"
 import { StatCard } from "@/components/StatCard"
+import StagePageClient from "./StagePageClient"
 
 export default async function StagePage({
     params
@@ -24,6 +25,7 @@ export default async function StagePage({
 
     return (
         <main className="min-h-screen bg-[var(--background)] text-white pb-20">
+            <StagePageClient stageName={stage.name} />
             <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-12 sm:pt-14 md:pt-16">
 
                 {/* Back Button */}
