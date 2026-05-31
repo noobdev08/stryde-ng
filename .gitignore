@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 codebase.md
+understanding.md
 
 # testing
 /coverage
