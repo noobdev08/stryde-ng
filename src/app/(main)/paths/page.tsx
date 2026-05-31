@@ -5,7 +5,6 @@ import { redirect } from "next/navigation"
 import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 import { SectionHeader } from '@/components/SectionHeader'
-import { Card } from '@/components/Card'
 
 const getIcon = (name: string) => {
   const iconMap: Record<string, React.ReactNode> = {

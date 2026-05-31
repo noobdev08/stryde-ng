@@ -1,5 +1,4 @@
 import prisma from "./prismaClient"
-import { Flame } from "lucide-react"
 
 export async function calculateStreak(userId: string): Promise<number> {
   const allProgress = await prisma.userProgress.findMany({
