@@ -6,6 +6,7 @@ import Link from "next/link"
 import { completeTask } from "../../../../../actions/progress"
 import { ActionButton } from "@/components/ActionButton"
 import { Card } from "@/components/Card"
+import { parseConceptParagraphs, parseInstructions } from "@/utils/lib/contentFormatters"
 
 export default async function TaskPage({
   params,
@@ -45,16 +46,8 @@ export default async function TaskPage({
   const totalTasks = task.stage.tasks.length
   const hasResources = task.resourceUrl || task.youtubeUrl
 
-  const conceptParagraphs = task.concept
-    ? task.concept
-      .split(/(?<=[.!?])\s+(?=[A-Z])/)
-      .reduce<string[]>((acc, para, i) => {
-        const groupIndex = Math.floor(i / 3)
-        if (!acc[groupIndex]) acc[groupIndex] = para
-        else acc[groupIndex] += " " + para
-        return acc
-      }, [])
-    : []
+  const conceptParagraphs = parseConceptParagraphs(task.concept || '')
+  const instructionSteps = parseInstructions(task.instruction || '')
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-white">
@@ -120,10 +113,36 @@ export default async function TaskPage({
               <p className="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em] mb-6">
                 Your Task
               </p>
-              <p className="text-white text-base leading-relaxed whitespace-pre-line">
-                {task.instruction}
-              </p>
-              <div className="mt-6 pt-6 border-t border-slate-800 flex items-center gap-3">
+              <div className="space-y-4 mb-6">
+                {instructionSteps.length > 0 ? (
+                  instructionSteps.map((step) => (
+                    <div key={step.number} className="flex gap-4">
+                      <div className="shrink-0 w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                        <span className="text-blue-400 font-bold text-sm">{step.number}</span>
+                      </div>
+                      <div className="flex-1 pt-1">
+                        <p className="text-slate-200 text-base leading-relaxed">
+                          {step.text}
+                        </p>
+                        {step.subItems.length > 0 && (
+                          <ul className="mt-3 ml-0 space-y-2">
+                            {step.subItems.map((subItem, i) => (
+                              <li key={i} className="text-slate-400 text-sm leading-relaxed pl-4 border-l border-slate-700">
+                                {subItem}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-slate-300 text-base leading-relaxed whitespace-pre-line">
+                    {task.instruction}
+                  </p>
+                )}
+              </div>
+              <div className="pt-6 border-t border-slate-800 flex items-center gap-3">
                 <Cat size={16} className="text-slate-500 shrink-0" />
                 <p className="text-slate-500 text-sm">
                   Push your work to GitHub before marking this complete. We will verify your repo exists.

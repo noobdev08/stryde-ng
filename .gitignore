@@ -11,6 +11,7 @@
 !.yarn/versions
 codebase.md
 understanding.md
+flow.md
 
 # testing
 /coverage
