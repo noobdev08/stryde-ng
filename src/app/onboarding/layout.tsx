@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { prisma } from "@/utils/lib/prismaClient"
+import prisma from "@/utils/lib/prismaClient"
 import { redirect } from "next/navigation"
 
 export default async function OnboardingLayout({
