@@ -12,9 +12,14 @@ export async function completeOnboarding(level: "beginner" | "intermediate" | "a
     redirect("/login")
   }
 
-  await prisma.userProfile.update({
+  await prisma.userProfile.upsert({
     where: { userId: user.id },
-    data: {
+    update: {
+      level,
+      hasCompletedOnboarding: true
+    },
+    create: {
+      userId: user.id,
       level,
       hasCompletedOnboarding: true
     }
@@ -23,7 +28,7 @@ export async function completeOnboarding(level: "beginner" | "intermediate" | "a
   if (level === "beginner") {
     redirect("/dashboard")
   } else if (level === "intermediate") {
-    redirect("/paths")
+    redirect("/paths/cmpx9nx5e00013ougpkjjyziu/cmpx9nzju000e3ougi9ldnejk/cmpx9o09f000k3ougtklz58i8")
   } else if (level === "advanced") {
     redirect("/paths?welcome=advanced")
   }
