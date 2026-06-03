@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
 import { SectionHeader } from '@/components/SectionHeader'
+import { WelcomeModal } from '@/components/WelcomeModal'
 
 const getIcon = (name: string) => {
   const iconMap: Record<string, React.ReactNode> = {
@@ -26,21 +27,24 @@ export default async function PathPage() {
   const processedPaths = dbPaths.map(path => {
     const { progressPercent, totalCount, completedCount } = calculatePathProgress(path.stages)
 
+    const comingSoonPaths = ["Backend", "Fullstack"]
+    const isComingSoon = comingSoonPaths.includes(path.name)
+
     return {
       id: path.id,
       title: path.name,
       description: path.description || "Master this specialization.",
       icon: getIcon(path.name),
       progress: progressPercent,
-      isLocked: path.isLocked,
+      isLocked: false,
       completedCount,
-      totalCount
+      totalCount,
+      comingSoon: isComingSoon
     }
   })
 
   const startedPaths = processedPaths.filter(p => p.progress > 0)
-  const availablePaths = processedPaths.filter(p => p.progress === 0 && !p.isLocked)
-  const lockedPaths = processedPaths.filter(p => p.isLocked)
+  const availablePaths = processedPaths.filter(p => p.progress === 0)
 
   return (
     <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 overflow-y-auto no-scrollbar max-w-7xl mx-auto">
@@ -49,7 +53,7 @@ export default async function PathPage() {
         subtitle="Choose your specialization and start executing."
         badge="Available Tracks"
       />
-      
+
       {startedPaths.length > 0 && (
         <div className="mb-10">
           <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Your Active Paths</h3>
@@ -65,6 +69,7 @@ export default async function PathPage() {
                 isLocked={path.isLocked}
                 completedCount={path.completedCount}
                 totalCount={path.totalCount}
+                comingSoon={path.comingSoon}
               />
             ))}
           </div>
@@ -72,7 +77,7 @@ export default async function PathPage() {
       )}
 
       {availablePaths.length > 0 && (
-        <div className="mb-10">
+        <div>
           <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Start a New Path</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {availablePaths.map((path) => (
@@ -86,32 +91,16 @@ export default async function PathPage() {
                 isLocked={path.isLocked}
                 completedCount={path.completedCount}
                 totalCount={path.totalCount}
+                comingSoon={path.comingSoon}
               />
             ))}
           </div>
         </div>
       )}
-
-      {lockedPaths.length > 0 && (
-        <div>
-          <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Coming Soon</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {lockedPaths.map((path) => (
-              <PathCard
-                key={path.id}
-                id={path.id}
-                title={path.title}
-                description={path.description}
-                icon={path.icon}
-                progress={path.progress}
-                isLocked={path.isLocked}
-                completedCount={path.completedCount}
-                totalCount={path.totalCount}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {(() => {
+        const frontendPath = processedPaths.find(p => p.title === "Frontend")
+        return frontendPath && <WelcomeModal frontendPathId={frontendPath.id} />
+      })()}
     </main>
   )
 }

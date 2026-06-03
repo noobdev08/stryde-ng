@@ -54,10 +54,12 @@ model Task {
 }
 
 model UserProfile {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  githubUsername String?
-  createdAt      DateTime @default(now())
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  githubUsername          String?
+  level                   String   @default("beginner")
+  hasCompletedOnboarding  Boolean  @default(false)
+  createdAt               DateTime @default(now())
 }
 
 model UserProgress {
