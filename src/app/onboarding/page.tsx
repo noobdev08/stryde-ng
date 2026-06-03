@@ -14,7 +14,11 @@ export default function OnboardingPage() {
   const handleContinue = async () => {
     if (!selectedLevel) return
     setIsSubmitting(true)
-    await completeOnboarding(selectedLevel)
+    try {
+      await completeOnboarding(selectedLevel)
+    } catch {
+      // redirect throws internally, this is expected
+    }
   }
 
   if (screen === 1) {
