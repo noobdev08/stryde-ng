@@ -54,7 +54,7 @@ export default function OnboardingPage() {
                   You build it on your machine
                 </h3>
                 <p className="text-slate-400">
-                  Write code locally in your favorite editor. You're in control
+                  Write code locally in your favorite editor. You&apos;re in control
                 </p>
               </div>
             </div>
@@ -79,7 +79,7 @@ export default function OnboardingPage() {
             className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl
               transition-colors duration-200 text-lg"
           >
-            Got it, let's go
+            Got it, let&apos;s go
           </button>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default function OnboardingPage() {
             Where are you starting from?
           </h1>
           <p className="text-slate-400 text-lg">
-            We'll tailor your experience to your skill level
+            We&apos;ll tailor your experience to your skill level
           </p>
         </div>
 

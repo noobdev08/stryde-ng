@@ -1,7 +1,7 @@
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
-import { prisma } from "@/utils/lib/prismaClient"
+import prisma from "@/utils/lib/prismaClient"
 import { redirect } from "next/navigation"
 
 export async function completeOnboarding(level: "beginner" | "intermediate" | "advanced") {
