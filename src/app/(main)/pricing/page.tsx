@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Check, Lock } from "lucide-react"
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
+import { createClient } from "@/utils/supabase/server"
 
 const plans = [
   {
@@ -65,7 +66,10 @@ const plans = [
   },
 ]
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const isOnFreePlan = !!user
   return (
     <main className="min-h-screen text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-12 sm:pt-14 md:pt-16 pb-24">
@@ -128,14 +132,16 @@ export default function PricingPage() {
                 <Link
                   href={plan.ctaHref}
                   className={`w-full text-center py-3 md:py-3.5 rounded-xl text-sm md:text-base font-black mb-8 transition-all ${
-                    plan.highlighted
+                    plan.name === "Starter" && isOnFreePlan
+                      ? "bg-emerald-600/30 text-emerald-300 border border-emerald-600/50 cursor-default pointer-events-none"
+                      : plan.highlighted
                       ? "bg-white text-blue-600 hover:bg-blue-50 shadow-lg"
                       : plan.comingSoon
                       ? "bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed pointer-events-none"
                       : "bg-slate-800 text-white border border-slate-700 hover:border-slate-500 hover:bg-slate-700"
                   }`}
                 >
-                  {plan.cta}
+                  {plan.name === "Starter" && isOnFreePlan ? "Current plan" : plan.cta}
                 </Link>
 
                 {/* Features */}

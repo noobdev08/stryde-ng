@@ -98,7 +98,6 @@ export function ActionButton({
           <>
             <Loader2 size={20} className="animate-spin" />
             <span className="hidden sm:inline">{displayLoadingText}</span>
-            <span className="sm:hidden text-xs">...</span>
           </>
         ) : (
           <>

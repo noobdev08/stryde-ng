@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import PathCard from '@/components/PathCard'
-import { Sparkles, Monitor, Layout, Database, Rocket, CheckCircle, Flame, TrendingUp, Target } from 'lucide-react'
+import { Sparkles, Monitor, Terminal, Database, Layers, CheckCircle, Flame, TrendingUp, Target } from 'lucide-react'
 import Link from 'next/link'
 import { getAllPathsWithProgress } from '@/utils/lib/pathQueries'
 import { calculatePathProgress } from '@/utils/lib/progressCalculator'
@@ -11,6 +11,16 @@ import { InteractiveOnboarding } from '@/components/InteractiveOnboarding'
 import { Card } from '@/components/Card'
 import { StatCard } from '@/components/StatCard'
 import { SectionHeader } from '@/components/SectionHeader'
+
+const getIcon = (name: string) => {
+  const iconMap: Record<string, React.ReactNode> = {
+    "Frontend": <Monitor size={24} />,
+    "Backend": <Database size={24} />,
+    "Fullstack": <Layers size={24} />,
+    "Data Structures": <Terminal size={24} />,
+  }
+  return iconMap[name] || <Sparkles size={24} />
+}
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -24,7 +34,20 @@ export default async function DashboardPage() {
 
   const pathsWithProgress = paths.map(path => {
     const { progressPercent, totalCount, completedCount } = calculatePathProgress(path.stages)
-    return { ...path, progressPercent, totalCount, completedCount }
+    const comingSoonPaths = ["Backend", "Fullstack"]
+    const isComingSoon = comingSoonPaths.includes(path.name)
+    return {
+      ...path,
+      title: path.name,
+      description: path.description || "Master this specialization.",
+      icon: getIcon(path.name),
+      progress: progressPercent,
+      progressPercent,
+      isLocked: false,
+      completedCount,
+      totalCount,
+      comingSoon: isComingSoon
+    }
   })
 
   const activePath = pathsWithProgress.find(p => p.progressPercent < 100 && !p.isLocked) || pathsWithProgress[0]
@@ -155,23 +178,19 @@ export default async function DashboardPage() {
             title="Your Learning Paths"
             subtitle="Choose your next adventure"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {pathsWithProgress.map((path) => (
               <PathCard
                 key={path.id}
                 id={path.id}
-                title={path.name}
-                description={path.description || ""}
-                icon={
-                  path.name.includes("Frontend") ? <Layout size={24} className="text-blue-400" /> :
-                    path.name.includes("Backend") ? <Database size={24} className="text-blue-400" /> :
-                      <Rocket size={24} className="text-blue-400" />
-                }
-                progress={path.progressPercent}
+                title={path.title}
+                description={path.description}
+                icon={path.icon}
+                progress={path.progress}
                 isLocked={path.isLocked}
                 completedCount={path.completedCount}
                 totalCount={path.totalCount}
-                className={path.progressPercent > 0 ? "border-blue-500/40 shadow-[0_0_30px_rgba(59,130,246,0.15)]" : ""}
+                comingSoon={path.comingSoon}
               />
             ))}
           </div>
