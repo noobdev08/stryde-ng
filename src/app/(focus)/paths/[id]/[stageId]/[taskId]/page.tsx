@@ -158,12 +158,6 @@ export default async function TaskPage({
                   </p>
                 )}
               </div>
-              <div className="pt-6 border-t border-slate-800 flex items-center gap-3">
-                <Cat size={16} className="text-slate-500 shrink-0" />
-                <p className="text-slate-500 text-sm">
-                  Push your work to GitHub before marking this complete. We will verify your repo exists.
-                </p>
-              </div>
             </Card>
           </div>
         )}
@@ -216,9 +210,11 @@ export default async function TaskPage({
           <h3 className="text-xs font-black text-slate-200 mb-2 uppercase tracking-widest">
             Mark as Complete
           </h3>
-          <p className="text-slate-500 text-sm mb-8">
-            Push your work to GitHub first. We will check your repo before marking this done.
-          </p>
+          {task.stage.validationType === "repo_exists" && (
+            <p className="text-slate-500 text-sm mb-8">
+              Push your work to GitHub first. We will check your repo before marking this done.
+            </p>
+          )}
           <form action={completeTask}>
             <input type="hidden" name="taskId" value={taskId} />
             <input type="hidden" name="stageId" value={stageId} />
