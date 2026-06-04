@@ -221,9 +221,9 @@ export default async function TaskPage({
             <input type="hidden" name="pathId" value={id} />
             <ActionButton
               variant="submit"
-              label="Complete Task"
+              label={task.stage.validationType === "repo_exists" ? "Verify and Complete Task" : "Complete Task"}
               completed={isCompleted}
-              loadingText="Completing..."
+              loadingText={task.stage.validationType === "repo_exists" ? "Verifying..." : "Completing..."}
               showCheckIcon
               size="lg"
             />

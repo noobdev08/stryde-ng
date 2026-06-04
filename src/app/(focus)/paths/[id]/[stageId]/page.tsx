@@ -45,13 +45,13 @@ export default async function StagePage({
             <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-12 sm:pt-14 md:pt-16 relative z-10">
 
                 {/* Back Button */}
-                <Link href={`/paths/${id}`} className="inline-block mb-6 sm:mb-8 text-slate-500 hover:text-white transition-colors flex items-center gap-2 group w-fit">
+                <Link href={`/paths/${id}`} className="text-slate-500 hover:text-white transition-colors inline-flex items-center gap-2 group">
                     <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-black uppercase tracking-widest">Back to Track</span>
+                    <span className="text-sm font-black uppercase tracking-widest">Back to Stage</span>
                 </Link>
 
                 {/* Header */}
-                <div className="mb-8 sm:mb-10">
+                <div className="mb-8 sm:mb-10 mt-5">
                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mb-2 sm:mb-3">{stage.name}</h1>
                     <p className="text-xs sm:text-sm md:text-lg text-slate-400">{stage.description || "Complete all tasks to master this stage."}</p>
                 </div>
