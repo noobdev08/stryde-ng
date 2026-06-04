@@ -50,14 +50,30 @@ export default async function TaskPage({
   const instructionSteps = parseInstructions(task.instruction || '')
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-12 sm:pt-14 md:pt-16 pb-20">
+    <main className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        .grid-bg {
+          background-image: linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px);
+          background-size: 60px 60px;
+        }
+      `}</style>
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="grid-bg absolute inset-0" />
+        <div className="animate-float absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/8 blur-[140px] rounded-full" />
+        <div className="animate-float absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-900/8 blur-[140px] rounded-full" />
+      </div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pt-12 sm:pt-14 md:pt-16 pb-20 relative z-10">
 
         {/* Back */}
         <div className="mb-12">
           <Link href={`/paths/${id}/${stageId}`} className="text-slate-500 hover:text-white transition-colors inline-flex items-center gap-2 group">
             <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm font-semibold uppercase tracking-wider">Back to Stage</span>
+            <span className="text-sm font-black uppercase tracking-widest">Back to Stage</span>
           </Link>
         </div>
 
@@ -65,17 +81,17 @@ export default async function TaskPage({
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">
             <div className={`
-              w-12 h-12 rounded-xl flex items-center justify-center shrink-0
+              w-12 h-12 rounded-2xl flex items-center justify-center shrink-0
               ${isCompleted ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-blue-500/10 text-blue-400 border border-blue-500/20"}
             `}
             >
-              {isCompleted ? <CircleCheck size={24} /> : <div className="text-lg font-bold">{taskNumber}</div>}
+              {isCompleted ? <CircleCheck size={24} /> : <div className="text-lg font-black">{taskNumber}</div>}
             </div>
             <p className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
               Task {taskNumber} of {totalTasks}
             </p>
             {isCompleted && (
-              <span className="text-emerald-400 text-xs font-black uppercase tracking-widest px-3 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+              <span className="text-emerald-400 text-xs font-black uppercase tracking-widest px-3 py-1 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
                 Completed
               </span>
             )}
@@ -117,8 +133,8 @@ export default async function TaskPage({
                 {instructionSteps.length > 0 ? (
                   instructionSteps.map((step) => (
                     <div key={step.number} className="flex gap-4">
-                      <div className="shrink-0 w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
-                        <span className="text-blue-400 font-bold text-sm">{step.number}</span>
+                      <div className="shrink-0 w-8 h-8 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                        <span className="text-blue-400 font-black text-sm">{step.number}</span>
                       </div>
                       <div className="flex-1 pt-1">
                         <p className="text-slate-200 text-base leading-relaxed">
@@ -127,7 +143,7 @@ export default async function TaskPage({
                         {step.subItems.length > 0 && (
                           <ul className="mt-3 ml-0 space-y-2">
                             {step.subItems.map((subItem, i) => (
-                              <li key={i} className="text-slate-400 text-sm leading-relaxed pl-4 border-l border-slate-700">
+                              <li key={i} className="text-slate-400 text-sm leading-relaxed pl-4 border-l border-slate-800">
                                 {subItem}
                               </li>
                             ))}
@@ -164,10 +180,10 @@ export default async function TaskPage({
                   href={task.resourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-5 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-all group"
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/30 border border-slate-800 hover:border-slate-700 transition-all group hover:bg-slate-900/50"
                 >
                   <BookOpen size={20} className="text-slate-500 group-hover:text-blue-400 transition-colors shrink-0" />
-                  <span className="font-semibold text-slate-300 group-hover:text-white transition-colors text-base">MDN Documentation</span>
+                  <span className="font-black text-slate-300 group-hover:text-white transition-colors text-base">MDN Documentation</span>
                   <ExternalLink size={16} className="text-slate-600 group-hover:text-blue-400 transition-colors ml-auto shrink-0" />
                 </Link>
               )}
@@ -176,10 +192,10 @@ export default async function TaskPage({
                   href={task.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-5 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-all group"
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-900/30 border border-slate-800 hover:border-slate-700 transition-all group hover:bg-slate-900/50"
                 >
                   <Video size={20} className="text-slate-500 group-hover:text-red-400 transition-colors shrink-0" />
-                  <span className="font-semibold text-slate-300 group-hover:text-white transition-colors text-base">Watch on YouTube</span>
+                  <span className="font-black text-slate-300 group-hover:text-white transition-colors text-base">Watch on YouTube</span>
                   <ExternalLink size={16} className="text-slate-600 group-hover:text-red-400 transition-colors ml-auto shrink-0" />
                 </Link>
               )}
@@ -189,14 +205,14 @@ export default async function TaskPage({
 
         {/* Error */}
         {errorMessage && (
-          <div className="mb-6 p-4 md:p-5 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
+          <div className="mb-6 p-4 md:p-5 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
             <AlertCircle size={18} className="text-red-400 shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm">{errorMessage}</p>
           </div>
         )}
 
         {/* Complete */}
-        <div className="border-t border-slate-900 pt-10">
+        <div className="border-t border-slate-800 pt-10">
           <h3 className="text-xs font-black text-slate-200 mb-2 uppercase tracking-widest">
             Mark as Complete
           </h3>

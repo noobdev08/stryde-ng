@@ -239,7 +239,7 @@ export default function LandingPage() {
           <RevealOnScroll>
             <p className="text-blue-400 text-xs font-black uppercase tracking-widest mb-4">THE DIFFERENCE</p>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
-              You&apos;t fake your way through Stryd.
+              You don&apos;t fake your way through Stryd.
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-8">
               Every task requires a real GitHub push. Stryd checks your repo exists before you advance. No checkbox. No honour system. Actual proof you built it.

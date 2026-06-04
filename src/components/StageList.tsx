@@ -44,19 +44,19 @@ export default function StageList({ stages, pathId, userPlan }: StageListProps) 
                       <div className="flex items-center gap-5">
                         {/* Status Icon */}
                         <div className={`
-                          w-12 h-12 rounded-xl flex items-center justify-center shrink-0
-                          ${isFinished ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-slate-800/50 text-slate-400 border border-slate-700/50"}
+                          w-12 h-12 rounded-2xl flex items-center justify-center shrink-0
+                          ${isFinished ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-slate-800/50 text-slate-400 border border-slate-800"}
                         `}>
                           {isFinished ? (
                             <CircleCheck size={24} />
                           ) : (
-                            <div className="text-lg font-bold">{index + 1}</div>
+                            <div className="text-lg font-black">{index + 1}</div>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-1">
-                            <p className={`text-base md:text-lg font-bold transition-colors group-hover:text-blue-400 ${isFinished ? "text-emerald-200" : "text-white"}`}>
+                            <p className={`text-base md:text-lg font-black transition-colors group-hover:text-blue-400 ${isFinished ? "text-emerald-200" : "text-white"}`}>
                               {stage.name}
                             </p>
                             {!accessible && (
@@ -74,10 +74,10 @@ export default function StageList({ stages, pathId, userPlan }: StageListProps) 
 
                           <div className="mt-2">
                             <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                                 Progress
                               </span>
-                              <span className="text-xs font-bold text-slate-400">
+                              <span className="text-xs font-black text-slate-400">
                                 {completedTasks} / {totalTasks} tasks
                               </span>
                             </div>
@@ -103,13 +103,13 @@ export default function StageList({ stages, pathId, userPlan }: StageListProps) 
                   <Card className="p-5 md:p-6 opacity-60 cursor-not-allowed">
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-5">
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-slate-800/50 text-slate-600 border border-slate-700/50">
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-slate-800/50 text-slate-600 border border-slate-800">
                           <Lock size={24} />
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-1">
-                            <p className="text-base md:text-lg font-bold text-slate-500">
+                            <p className="text-base md:text-lg font-black text-slate-500">
                               {stage.name}
                             </p>
                             <span className="text-[10px] font-black uppercase tracking-tighter px-2 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
