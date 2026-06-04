@@ -106,7 +106,7 @@ export default async function SettingsPage({
                     Name
                   </label>
                   <div className="w-full bg-slate-900/30 border border-slate-800 rounded-2xl px-5 py-3.5 text-slate-400 text-sm">
-                    {user.userMetadata?.name || "User"}
+                    {user.user_metadata?.name || "User"}
                   </div>
                 </div>
               </div>
