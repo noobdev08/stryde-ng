@@ -13,9 +13,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stryd NG",
-  description: "Execution is everything. Build your dev skills with daily challenges and projects.",
-};
+  title: "Stryd — Stop Watching. Start Shipping.",
+  description: "The execution platform for Nigerian CS students tired of tutorial hell. Build real projects, push to GitHub, and master the stack.",
+  keywords: ["coding", "developer", "Nigeria", "CS students", "tutorial hell", "GitHub", "programming"],
+  openGraph: {
+    title: "Stryd — Stop Watching. Start Shipping.",
+    description: "The execution platform for Nigerian CS students tired of tutorial hell. Build real projects, push to GitHub, and master the stack.",
+    url: "https://stryd-ng.vercel.app",
+    siteName: "Stryd",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stryd — Stop Watching. Start Shipping.",
+    description: "The execution platform for Nigerian CS students tired of tutorial hell.",
+  },
+}
 
 export default function RootLayout({
   children,
