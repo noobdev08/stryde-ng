@@ -91,10 +91,11 @@ export default async function PricingPage() {
               <Card className={`
                 p-6 md:p-7 flex flex-col h-full
                 ${plan.highlighted
-                  ? "bg-gradient-to-b from-blue-600/30 to-blue-600/10 border-blue-500"
-                  : "bg-slate-900/60 border-slate-800"
+                  ? "bg-gradient-to-b from-blue-600/15 to-blue-600/5 border border-blue-500/40"
+                  : ""
                 }
-              `}>
+              `}
+                hoverable={!plan.comingSoon}>
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
@@ -106,7 +107,7 @@ export default async function PricingPage() {
 
                 {/* Plan name */}
                 <p className={`text-[11px] font-black uppercase tracking-[0.2em] mb-3 ${
-                  plan.highlighted ? "text-blue-200" : "text-slate-500"
+                  plan.highlighted ? "text-blue-300" : "text-slate-500"
                 }`}>
                   {plan.name}
                 </p>
@@ -117,28 +118,28 @@ export default async function PricingPage() {
                     {plan.price}
                   </span>
                   {plan.priceSubtext && (
-                    <span className={`text-sm md:text-base ml-2 ${plan.highlighted ? "text-blue-200" : "text-slate-500"}`}>
+                    <span className={`text-sm md:text-base ml-2 ${plan.highlighted ? "text-blue-300" : "text-slate-500"}`}>
                       {plan.priceSubtext}
                     </span>
                   )}
                 </div>
 
                 {/* Description */}
-                <p className={`text-sm md:text-base mb-8 ${plan.highlighted ? "text-blue-100" : "text-slate-400"}`}>
+                <p className={`text-sm md:text-base mb-8 ${plan.highlighted ? "text-blue-200" : "text-slate-400"}`}>
                   {plan.description}
                 </p>
 
                 {/* CTA */}
                 <Link
                   href={plan.ctaHref}
-                  className={`w-full text-center py-3 md:py-3.5 rounded-xl text-sm md:text-base font-black mb-8 transition-all ${
+                  className={`w-full text-center py-3 md:py-4 rounded-2xl text-sm md:text-base font-black mb-8 transition-all ${
                     plan.name === "Starter" && isOnFreePlan
                       ? "bg-emerald-600/30 text-emerald-300 border border-emerald-600/50 cursor-default pointer-events-none"
                       : plan.highlighted
-                      ? "bg-white text-blue-600 hover:bg-blue-50 shadow-lg"
+                      ? "bg-blue-600 hover:bg-blue-500 text-white shadow-2xl shadow-blue-600/30"
                       : plan.comingSoon
-                      ? "bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed pointer-events-none"
-                      : "bg-slate-800 text-white border border-slate-700 hover:border-slate-500 hover:bg-slate-700"
+                      ? "bg-slate-800 text-slate-500 border border-slate-800 cursor-not-allowed pointer-events-none"
+                      : "border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 hover:bg-slate-900/50"
                   }`}
                 >
                   {plan.name === "Starter" && isOnFreePlan ? "Current plan" : plan.cta}
@@ -150,20 +151,20 @@ export default async function PricingPage() {
                     <div key={f} className="flex items-start gap-3">
                       <Check
                         size={16}
-                        className={`mt-0.5 shrink-0 ${plan.highlighted ? "text-white" : "text-blue-400"}`}
+                        className={`mt-0.5 shrink-0 ${plan.highlighted ? "text-blue-300" : "text-blue-400"}`}
                       />
-                      <span className={`text-sm md:text-base ${plan.highlighted ? "text-blue-100" : "text-slate-300"}`}>
+                      <span className={`text-sm md:text-base ${plan.highlighted ? "text-blue-200" : "text-slate-300"}`}>
                         {f}
                       </span>
                     </div>
                   ))}
 
                   {plan.locked.length > 0 && (
-                    <div className="mt-2 pt-4 border-t border-slate-700/50 flex flex-col gap-3">
+                    <div className="mt-2 pt-4 border-t border-slate-800 flex flex-col gap-3">
                       {plan.locked.map((f) => (
                         <div key={f} className="flex items-start gap-3 opacity-40">
-                          <Lock size={14} className="mt-0.5 shrink-0 text-slate-400" />
-                          <span className="text-sm md:text-base text-slate-400">{f}</span>
+                          <Lock size={14} className="mt-0.5 shrink-0 text-slate-500" />
+                          <span className="text-sm md:text-base text-slate-500">{f}</span>
                         </div>
                       ))}
                     </div>

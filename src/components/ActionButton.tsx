@@ -50,7 +50,7 @@ export function ActionButton({
     lg: "px-8 md:px-10 py-4 md:py-5 text-base md:text-lg min-h-[48px] md:min-h-[52px]",
   }
 
-  const baseClasses = `w-full font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed rounded-lg shadow-sm`
+  const baseClasses = `w-full font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed rounded-2xl shadow-2xl shadow-blue-600/30`
 
   // Status styles
   const statusStyles = {

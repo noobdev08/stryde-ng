@@ -51,9 +51,9 @@ export default function PathCard({
 
   const cardContent = (
     <div className={`
-      bg-slate-900/40 border border-slate-700/40 hover:border-blue-500/40
+      border border-slate-800 bg-slate-900/30 hover:border-blue-500/40 hover:bg-slate-900/60
       transition-all duration-300 rounded-2xl p-6 relative overflow-hidden
-      cursor-pointer min-h-[260px] flex flex-col justify-between
+      cursor-pointer min-h-[260px] flex flex-col justify-between hover:-translate-y-1
       ${comingSoon ? 'opacity-60' : ''}
       ${className}
     `}>

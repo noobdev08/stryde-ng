@@ -121,16 +121,16 @@ export default async function DashboardPage() {
                   </div>
 
                   <Link
-                    href={nextTask ? `/paths/${activePath?.id}/${nextTask.stageId}/${nextTask.id}` : '#'}
-                    className="w-full lg:w-auto shrink-0"
-                  >
-                    <button
-                      className={`w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider transition-all duration-300 cursor-pointer shadow-[0_0_30px_rgba(59,130,246,0.25)] hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] ${!nextTask && 'opacity-50 cursor-not-allowed'}`}
-                      disabled={!nextTask}
-                    >
-                      {nextTask ? 'Continue →' : 'All Set! 🎉'}
-                    </button>
-                  </Link>
+                href={nextTask ? `/paths/${activePath?.id}/${nextTask.stageId}/${nextTask.id}` : '#'}
+                className="w-full lg:w-auto shrink-0"
+              >
+                <button
+                  className={`w-full lg:w-auto bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-2xl shadow-blue-600/30 ${!nextTask && 'opacity-50 cursor-not-allowed'}`}
+                  disabled={!nextTask}
+                >
+                  {nextTask ? 'Continue →' : 'All Set! 🎉'}
+                </button>
+              </Link>
                 </div>
               </div>
             </Card>

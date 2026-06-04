@@ -23,10 +23,10 @@ export function StatCard({
   };
 
   return (
-    <div className={`bg-slate-900/40 border border-slate-700/40 rounded-2xl p-5 md:p-6 transition-all duration-300 ${colorClasses[color]}`}>
+    <div className={`border border-slate-800 bg-slate-900/30 rounded-2xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-slate-900/60 ${colorClasses[color]}`}>
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-slate-500 font-medium mb-2 uppercase tracking-wider">{title}</p>
+          <p className="text-xs text-slate-500 font-black mb-2 uppercase tracking-widest">{title}</p>
           <p className="text-2xl md:text-3xl font-black flex items-baseline gap-1">
             <span className={colorClasses[color].split(' ')[0]}>{value}</span>
             {suffix && <span className="text-sm text-slate-500">{suffix}</span>}

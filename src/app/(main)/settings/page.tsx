@@ -35,19 +35,19 @@ export default async function SettingsPage({
           {/* GitHub Integration */}
           <Card className="p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-slate-800/50 rounded-xl">
+              <div className="p-3 bg-slate-900/50 rounded-2xl">
                 <Cat size={24} className="text-slate-300" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">GitHub Integration</h2>
-                <p className="text-sm text-slate-500 mt-0.5">
+                <h2 className="text-lg font-black text-white">GitHub Integration</h2>
+                <p className="text-sm text-slate-400 mt-0.5">
                   Required to verify your work before completing tasks
                 </p>
               </div>
             </div>
 
             {saved && (
-              <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2">
+              <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2">
                 <div className="text-emerald-400">✓</div>
                 <p className="text-emerald-300 text-sm font-medium">GitHub username saved successfully!</p>
               </div>
@@ -55,7 +55,7 @@ export default async function SettingsPage({
 
             <form action={saveGithubUsername} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="githubUsername" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <label htmlFor="githubUsername" className="text-xs font-black text-slate-400 uppercase tracking-widest">
                   GitHub Username
                 </label>
                 <input
@@ -64,12 +64,12 @@ export default async function SettingsPage({
                   name="githubUsername"
                   defaultValue={profile?.githubUsername ?? ""}
                   placeholder="your-github-username"
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-5 py-3.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-blue-500/50 transition-all"
+                  className="w-full bg-slate-900/30 border border-slate-800 rounded-2xl px-5 py-3.5 text-white focus:outline-none focus:border-blue-500/40 transition-all placeholder:text-slate-600"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-3.5 rounded-xl font-bold transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.2)] flex items-center justify-center gap-2"
+                className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-2xl font-black transition-all duration-300 cursor-pointer shadow-2xl shadow-blue-600/30 flex items-center justify-center gap-2"
               >
                 <Save size={18} />
                 Save Username
@@ -80,12 +80,12 @@ export default async function SettingsPage({
           {/* Account Settings */}
           <Card className="p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-slate-800/50 rounded-xl">
+              <div className="p-3 bg-slate-900/50 rounded-2xl">
                 <User size={24} className="text-slate-300" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Account</h2>
-                <p className="text-sm text-slate-500 mt-0.5">
+                <h2 className="text-lg font-black text-white">Account</h2>
+                <p className="text-sm text-slate-400 mt-0.5">
                   Manage your account information
                 </p>
               </div>
@@ -94,19 +94,19 @@ export default async function SettingsPage({
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest">
                     Email
                   </label>
-                  <div className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-5 py-3.5 text-slate-400 text-sm">
+                  <div className="w-full bg-slate-900/30 border border-slate-800 rounded-2xl px-5 py-3.5 text-slate-400 text-sm">
                     {user.email}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest">
                     Name
                   </label>
-                  <div className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-5 py-3.5 text-slate-400 text-sm">
-                    {user.user_metadata?.name || "User"}
+                  <div className="w-full bg-slate-900/30 border border-slate-800 rounded-2xl px-5 py-3.5 text-slate-400 text-sm">
+                    {user.userMetadata?.name || "User"}
                   </div>
                 </div>
               </div>
@@ -116,19 +116,19 @@ export default async function SettingsPage({
           {/* Notifications */}
           <Card className="p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-slate-800/50 rounded-xl">
+              <div className="p-3 bg-slate-900/50 rounded-2xl">
                 <Bell size={24} className="text-slate-300" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Notifications</h2>
-                <p className="text-sm text-slate-500 mt-0.5">
+                <h2 className="text-lg font-black text-white">Notifications</h2>
+                <p className="text-sm text-slate-400 mt-0.5">
                   Control your notification preferences
                 </p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b border-slate-800/50">
+              <div className="flex items-center justify-between py-3 border-b border-slate-800">
                 <div>
                   <p className="text-sm font-medium text-white">Email Notifications</p>
                   <p className="text-xs text-slate-500">Receive updates about your progress</p>
@@ -152,12 +152,12 @@ export default async function SettingsPage({
           {/* Account Actions */}
           <Card className="p-6 md:p-8 border-red-500/20">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-red-500/10 rounded-xl">
+              <div className="p-3 bg-red-500/10 rounded-2xl">
                 <Shield size={24} className="text-red-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Account Actions</h2>
-                <p className="text-sm text-slate-500 mt-0.5">
+                <h2 className="text-lg font-black text-white">Account Actions</h2>
+                <p className="text-sm text-slate-400 mt-0.5">
                   Manage your account security and access
                 </p>
               </div>
@@ -166,7 +166,7 @@ export default async function SettingsPage({
             <form action={logout} className="mb-4">
               <button
                 type="submit"
-                className="w-full md:w-auto bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-semibold px-8 py-3.5 rounded-xl transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full md:w-auto bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-black px-8 py-3.5 rounded-2xl transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
               >
                 <LogOut size={18} />
                 Sign Out

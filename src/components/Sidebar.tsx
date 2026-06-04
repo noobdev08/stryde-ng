@@ -26,11 +26,11 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between px-4 sm:px-6 py-4 bg-[#0b1120] border-b border-slate-800/50 fixed top-0 w-full z-50 backdrop-blur-xl bg-opacity-90">
+      <div className="lg:hidden flex items-center justify-between px-4 sm:px-6 py-4 bg-slate-950 border-b border-slate-800 fixed top-0 w-full z-50">
         <Logo size={36} showText={true} />
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-slate-400 hover:text-white p-2.5 h-11 w-11 flex items-center justify-center rounded-xl transition-all bg-slate-900/50 border border-slate-800/50 hover:bg-slate-800"
+          className="text-slate-400 hover:text-white p-2.5 h-11 w-11 flex items-center justify-center rounded-2xl transition-all bg-slate-900/30 border border-slate-800 hover:bg-slate-900/60 hover:border-blue-500/40"
           aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -40,11 +40,11 @@ export default function Sidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed z-40 h-screen w-72 bg-gradient-to-b from-[#0b1120] to-slate-950/80 border-r border-slate-800/60
+          fixed z-40 h-screen w-72 bg-slate-950 border-r border-slate-800
           flex flex-col px-5 pt-20 lg:pt-8
           transition-all duration-500 ease-out
           ${isOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}
-          lg:translate-x-0 lg:shadow-none lg:bg-[#0b1120]
+          lg:translate-x-0 lg:shadow-none
         `}
       >
         {/* Logo */}
@@ -63,14 +63,13 @@ export default function Sidebar() {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={`
-                  flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group relative overflow-hidden
+                  flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group relative overflow-hidden border
                   ${isActive
-                    ? "bg-gradient-to-r from-blue-600/20 to-blue-500/10 text-white border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/50 hover:border-slate-700/50 border border-transparent"
+                    ? "bg-slate-900/30 text-white border-blue-500/40"
+                    : "text-slate-400 hover:text-white hover:bg-slate-900/30 border-slate-800 hover:border-blue-500/40"
                   }
                 `}
               >
-                {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />}
                 <link.icon
                   size={22}
                   className={
@@ -79,7 +78,7 @@ export default function Sidebar() {
                       : "group-hover:text-blue-400 transition-colors"
                   }
                 />
-                <span className="font-semibold text-sm tracking-wide">{link.name}</span>
+                <span className="font-black text-sm">{link.name}</span>
               </Link>
             )
           })}
@@ -89,10 +88,10 @@ export default function Sidebar() {
         <form action={logout} className="mt-auto mb-8">
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-3 text-slate-400 hover:text-red-400 hover:bg-red-500/10 px-5 py-4 rounded-2xl transition-all duration-300 border border-transparent hover:border-red-500/20"
+            className="w-full flex items-center justify-center gap-3 text-slate-400 hover:text-red-400 hover:bg-red-500/10 px-5 py-4 rounded-2xl transition-all duration-300 border border-slate-800 hover:border-red-500/40"
           >
             <LogOut size={22} />
-            <span className="font-semibold text-sm tracking-wide">Log out</span>
+            <span className="font-black text-sm">Log out</span>
           </button>
         </form>
       </aside>
